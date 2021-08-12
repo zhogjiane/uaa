@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) [2021] [shankaiyu]
+ * Copyright (c) [2021] [sky5486560@gmail.com]
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
 /**
  * 基础实体类
  *
- * @author shankaiyu@hoteamsoft.com
+ * @author sky5486560@gmail.com
  * @date 2021/8/12
  */
 @ApiModel(value = "基础实体类")

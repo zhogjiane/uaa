@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) [2021] [shankaiyu]
+ * Copyright (c) [2021] [sky5486560@gmail.com]
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * 账户管理统一认证服务
  *
- * @author shankaiyu@hoteamsoft.com
+ * @author sky5486560@gmail.com
  * @date 2021/8/12
  */
 @Slf4j

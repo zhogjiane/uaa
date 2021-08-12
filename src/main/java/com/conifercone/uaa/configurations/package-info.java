@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) [2021] [shankaiyu]
+ * Copyright (c) [2021] [sky5486560@gmail.com]
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 /**
  * 用来放置各种自定义配置类
  *
- * @author shankaiyu@hoteamsoft.com
+ * @author sky5486560@gmail.com
  * @date 2021/8/12
  */
 package com.conifercone.uaa.configurations;
