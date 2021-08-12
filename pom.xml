@@ -26,6 +26,7 @@
         <lombok.version>1.18.20</lombok.version>
         <hutool.version>5.7.7</hutool.version>
         <sa-token-dao-redis-jackson.version>1.24.0</sa-token-dao-redis-jackson.version>
+        <springfox.version>3.0.0</springfox.version>
     </properties>
 
     <!-- SpringCloud-dependencies版本管理 -->
@@ -131,6 +132,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!-- 引入Swagger3依赖 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox.version}</version>
         </dependency>
     </dependencies>
 </project>
