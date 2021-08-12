@@ -22,6 +22,9 @@
         <druid.version>1.2.6</druid.version>
         <mybatis.plus.version>3.4.3.1</mybatis.plus.version>
         <mysql.connector.version>8.0.25</mysql.connector.version>
+        <sa-token.version>1.24.0</sa-token.version>
+        <lombok.version>1.18.20</lombok.version>
+        <hutool.version>5.7.7</hutool.version>
     </properties>
 
     <!-- SpringCloud-dependencies版本管理 -->
@@ -97,6 +100,25 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 </project>
