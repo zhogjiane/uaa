@@ -28,6 +28,7 @@ import cn.dev33.satoken.SaManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * 账户管理统一认证服务
@@ -35,8 +36,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author shankaiyu@hoteamsoft.com
  * @date 2021/8/12
  */
-@SpringBootApplication
 @Slf4j
+@SpringBootApplication
+@EnableDiscoveryClient
 public class UaaApplicationServer {
 
     public static void main(String[] args) {
