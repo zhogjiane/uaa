@@ -25,6 +25,7 @@
         <sa-token.version>1.24.0</sa-token.version>
         <lombok.version>1.18.20</lombok.version>
         <hutool.version>5.7.7</hutool.version>
+        <sa-token-dao-redis-jackson.version>1.24.0</sa-token-dao-redis-jackson.version>
     </properties>
 
     <!-- SpringCloud-dependencies版本管理 -->
@@ -119,6 +120,17 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <!-- Sa-Token 整合 Redis （使用jackson序列化方式） -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis-jackson</artifactId>
+            <version>${sa-token-dao-redis-jackson.version}</version>
+        </dependency>
+        <!-- 提供Redis连接池 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
     </dependencies>
 </project>
