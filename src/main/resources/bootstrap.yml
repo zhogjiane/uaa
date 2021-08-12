@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: uaa
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      config:
+        namespace: ${nacos_namespace:0fc7a907-7d3d-4e96-bf8c-a603a0939a9f}
+        server-addr: ${nacos_ip:127.0.0.1:8848}
+        file-extension: yml
+      discovery:
+        namespace: ${nacos_namespace:0fc7a907-7d3d-4e96-bf8c-a603a0939a9f}
+        server-addr: ${nacos_ip:127.0.0.1:8848}
