@@ -22,44 +22,36 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.domain.exception;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
+import lombok.Getter;
 
 /**
- * 系统用户表
+ * 自定义异常
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/13
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@TableName(value = "sys_user")
-@ApiModel(value = "系统用户表")
-public class SysUser extends BaseEntity {
+@Getter
+public class BizException extends RuntimeException {
 
-    @ApiModelProperty(value = "账户名称")
-    private String accountName;
+    /**
+     * 异常码
+     */
+    private final int code;
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    /**
+     * 异常信息
+     */
+    private final String msg;
 
-    @ApiModelProperty(value = "真实姓名")
-    private String realName;
+    public BizException() {
+        this(ResultCode.FAILED);
+    }
 
-    @ApiModelProperty(value = "性别")
-    private String sex;
-
-    @ApiModelProperty(value = "手机号")
-    private String phoneNumber;
-
-    @ApiModelProperty(value = "邮箱")
-    private String email;
-
+    public BizException(ResultCode failed) {
+        this.code = failed.getCode();
+        this.msg = failed.getMsg();
+    }
 }

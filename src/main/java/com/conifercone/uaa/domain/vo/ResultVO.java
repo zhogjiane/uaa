@@ -22,44 +22,42 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.domain.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
- * 系统用户表
+ * 自定义统一响应体
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/13
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@TableName(value = "sys_user")
-@ApiModel(value = "系统用户表")
-public class SysUser extends BaseEntity {
+public class ResultVO<T> {
 
-    @ApiModelProperty(value = "账户名称")
-    private String accountName;
+    /**
+     * 状态码，比如1000代表响应成功
+     */
+    private int code;
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    /**
+     * 响应信息，用来说明响应情况
+     */
+    private String msg;
 
-    @ApiModelProperty(value = "真实姓名")
-    private String realName;
+    /**
+     * 响应的具体数据
+     */
+    private T data;
 
-    @ApiModelProperty(value = "性别")
-    private String sex;
+    public ResultVO(T data) {
+        this(ResultCode.SUCCESS, data);
+    }
 
-    @ApiModelProperty(value = "手机号")
-    private String phoneNumber;
-
-    @ApiModelProperty(value = "邮箱")
-    private String email;
-
+    public ResultVO(ResultCode resultCode, T data) {
+        this.code = resultCode.getCode();
+        this.msg = resultCode.getMsg();
+        this.data = data;
+    }
 }

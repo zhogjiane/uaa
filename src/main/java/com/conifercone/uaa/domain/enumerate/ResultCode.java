@@ -22,44 +22,36 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.domain.enumerate;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.Getter;
 
 /**
- * 系统用户表
+ * 响应码枚举
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/13
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@TableName(value = "sys_user")
-@ApiModel(value = "系统用户表")
-public class SysUser extends BaseEntity {
+@Getter
+public enum ResultCode {
 
-    @ApiModelProperty(value = "账户名称")
-    private String accountName;
+    //1000系列通用错误
+    SUCCESS(1000, "操作成功"),
+    FAILED(1001, "接口错误"),
+    VALIDATE_FAILED(1002, "参数校验失败"),
+    ERROR(1003, "未知错误"),
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    //2000系列用户错误
+    USER_NOT_EXIST(2000, "用户不存在"),
+    USER_LOGIN_FAIL(2001, "用户名或密码错误"),
+    USER_NOT_LOGIN(2002, "用户还未登录,请先登录"),
+    NO_PERMISSION(2003, "权限不足,请联系管理员");
 
-    @ApiModelProperty(value = "真实姓名")
-    private String realName;
+    private final int code;
+    private final String msg;
 
-    @ApiModelProperty(value = "性别")
-    private String sex;
-
-    @ApiModelProperty(value = "手机号")
-    private String phoneNumber;
-
-    @ApiModelProperty(value = "邮箱")
-    private String email;
-
+    ResultCode(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
 }
