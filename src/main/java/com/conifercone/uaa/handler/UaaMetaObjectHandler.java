@@ -22,45 +22,33 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.handler;
 
-import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import org.apache.ibatis.reflection.MetaObject;
 
 import java.time.LocalDateTime;
 
 /**
- * 基础实体类
+ * 自动填充字段处理器
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/13
  */
-@ApiModel(value = "基础实体类")
-public class BaseEntity {
+public class UaaMetaObjectHandler implements MetaObjectHandler {
 
-    @ApiModelProperty(value = "主键id")
-    @TableId(value = "id", type = IdType.INPUT)
-    protected Long id;
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, "createBy", Long.class, StpUtil.getLoginIdAsLong());
+        this.strictInsertFill(metaObject, "updateBy", Long.class, StpUtil.getLoginIdAsLong());
+    }
 
-    @ApiModelProperty(value = "创建人")
-    @TableField(value = "create_by", fill = FieldFill.INSERT)
-    protected Long createBy;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
-    protected LocalDateTime createTime;
-
-    @ApiModelProperty(value = "修改人")
-    @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    protected String updateBy;
-
-    @ApiModelProperty(value = "修改时间")
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-    protected LocalDateTime updateTime;
-
-    @TableLogic(value = "0", delval = "1")
-    @TableField("removed")
-    @ApiModelProperty(value = "删除标识")
-    protected Boolean removed;
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, "updateBy", Long.class, StpUtil.getLoginIdAsLong());
+    }
 }

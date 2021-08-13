@@ -22,45 +22,30 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.configurations;
 
-import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import java.time.LocalDateTime;
+import com.conifercone.uaa.handler.UaaMetaObjectHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 基础实体类
+ * MP配置文件
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/13
  */
-@ApiModel(value = "基础实体类")
-public class BaseEntity {
+@Configuration
+@EnableTransactionManagement
+public class MybatisPlusConfig {
 
-    @ApiModelProperty(value = "主键id")
-    @TableId(value = "id", type = IdType.INPUT)
-    protected Long id;
-
-    @ApiModelProperty(value = "创建人")
-    @TableField(value = "create_by", fill = FieldFill.INSERT)
-    protected Long createBy;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
-    protected LocalDateTime createTime;
-
-    @ApiModelProperty(value = "修改人")
-    @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    protected String updateBy;
-
-    @ApiModelProperty(value = "修改时间")
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-    protected LocalDateTime updateTime;
-
-    @TableLogic(value = "0", delval = "1")
-    @TableField("removed")
-    @ApiModelProperty(value = "删除标识")
-    protected Boolean removed;
+    /**
+     * 自动填充数据
+     */
+    @Bean
+    @ConditionalOnMissingBean(UaaMetaObjectHandler.class)
+    public UaaMetaObjectHandler uaaMetaObjectHandler() {
+        return new UaaMetaObjectHandler();
+    }
 }
