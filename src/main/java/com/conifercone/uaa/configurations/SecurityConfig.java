@@ -22,48 +22,26 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.service.impl;
+package com.conifercone.uaa.configurations;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.conifercone.uaa.domain.entity.SysUser;
-import com.conifercone.uaa.domain.vo.SysUserVO;
-import com.conifercone.uaa.mapper.UserMapper;
-import com.conifercone.uaa.service.IUserService;
-import io.swagger.annotations.Api;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 /**
- * 用户service实现
+ * 安全配置类
  *
  * @author sky5486560@gmail.com
  * @date 2021/8/16
  */
-@Service
-@Slf4j
-@Api(value = "用户管理", tags = "用户管理")
-public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements IUserService {
+@Configuration
+public class SecurityConfig {
 
-    @Resource
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    /**
-     * 新增用户
-     *
-     * @param newUser 新用户
-     * @return {@link SysUserVO}
+    /*
+     * 注入BCryptPasswordEncoder
      */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public SysUserVO newUsers(SysUserVO newUser) {
-        //密码加密
-        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        this.save(BeanUtil.copyProperties(newUser, SysUser.class));
-        return newUser;
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
