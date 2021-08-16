@@ -8,6 +8,12 @@ plugins {
     id 'java'
 }
 
+
+group = 'org.conifercone'
+version = '1.0-SNAPSHOT'
+description = 'uaa'
+sourceCompatibility = '1.8'
+
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public/' }
     mavenLocal()
@@ -38,13 +44,13 @@ dependencies {
     implementation 'org.apache.commons:commons-pool2:2.10.0'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }
-
-group = 'org.conifercone'
-version = '1.0-SNAPSHOT'
-description = 'uaa'
-sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
 }
