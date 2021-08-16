@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  * 用户逻辑控制
@@ -53,7 +54,7 @@ public class UserController {
 
     @PostMapping
     @ApiOperation("新增用户")
-    public SysUserVO newUsers(@RequestBody SysUserVO newUser) {
+    public SysUserVO newUsers(@RequestBody @Valid SysUserVO newUser) {
         return userService.newUsers(newUser);
     }
 }
