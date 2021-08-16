@@ -22,29 +22,18 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa;
+package com.conifercone.uaa.mapper;
 
-import cn.dev33.satoken.SaManager;
-import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.conifercone.uaa.domain.entity.SysUser;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 账户管理统一认证服务
+ * 用户mapper
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/16
  */
-@Slf4j
-@SpringBootApplication
-@EnableDiscoveryClient
-@MapperScan(basePackages = {"com.conifercone.uaa.mapper"})
-public class UaaApplicationServer {
-
-    public static void main(String[] args) {
-        SpringApplication.run(UaaApplicationServer.class, args);
-        log.info("启动成功：Sa-Token配置如下：" + SaManager.getConfig());
-    }
+@Mapper
+public interface UserMapper extends BaseMapper<SysUser> {
 }

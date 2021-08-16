@@ -22,29 +22,38 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa;
+package com.conifercone.uaa.controller;
 
-import cn.dev33.satoken.SaManager;
+import com.conifercone.uaa.domain.vo.SysUserVO;
+import com.conifercone.uaa.service.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
- * 账户管理统一认证服务
+ * 用户逻辑控制
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/16
  */
+@RestController
+@RequestMapping("/user")
 @Slf4j
-@SpringBootApplication
-@EnableDiscoveryClient
-@MapperScan(basePackages = {"com.conifercone.uaa.mapper"})
-public class UaaApplicationServer {
+@Api(value = "用户管理", tags = "用户管理")
+public class UserController {
 
-    public static void main(String[] args) {
-        SpringApplication.run(UaaApplicationServer.class, args);
-        log.info("启动成功：Sa-Token配置如下：" + SaManager.getConfig());
+    @Resource
+    private IUserService userService;
+
+    @PostMapping
+    @ApiOperation("新增用户")
+    public SysUserVO newUsers(@RequestBody SysUserVO newUser) {
+        return userService.newUsers(newUser);
     }
 }

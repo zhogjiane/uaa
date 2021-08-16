@@ -22,29 +22,38 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa;
+package com.conifercone.uaa.service.impl;
 
-import cn.dev33.satoken.SaManager;
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.conifercone.uaa.domain.entity.SysUser;
+import com.conifercone.uaa.domain.vo.SysUserVO;
+import com.conifercone.uaa.mapper.UserMapper;
+import com.conifercone.uaa.service.IUserService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.stereotype.Service;
 
 /**
- * 账户管理统一认证服务
+ * 用户service实现
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/16
  */
+@Service
 @Slf4j
-@SpringBootApplication
-@EnableDiscoveryClient
-@MapperScan(basePackages = {"com.conifercone.uaa.mapper"})
-public class UaaApplicationServer {
+@Api(value = "用户管理", tags = "用户管理")
+public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements IUserService {
 
-    public static void main(String[] args) {
-        SpringApplication.run(UaaApplicationServer.class, args);
-        log.info("启动成功：Sa-Token配置如下：" + SaManager.getConfig());
+    /**
+     * 新增用户
+     *
+     * @param newUser 新用户
+     * @return {@link SysUserVO}
+     */
+    @Override
+    public SysUserVO newUsers(SysUserVO newUser) {
+        this.save(BeanUtil.copyProperties(newUser, SysUser.class));
+        return newUser;
     }
 }

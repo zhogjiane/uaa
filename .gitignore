@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 logs
-src/main/resources/rebel.xml
+rebel.xml

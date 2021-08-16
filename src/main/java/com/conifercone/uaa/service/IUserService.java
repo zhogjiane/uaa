@@ -22,29 +22,25 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa;
+package com.conifercone.uaa.service;
 
-import cn.dev33.satoken.SaManager;
-import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.conifercone.uaa.domain.entity.SysUser;
+import com.conifercone.uaa.domain.vo.SysUserVO;
 
 /**
- * 账户管理统一认证服务
+ * 用户service
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/16
  */
-@Slf4j
-@SpringBootApplication
-@EnableDiscoveryClient
-@MapperScan(basePackages = {"com.conifercone.uaa.mapper"})
-public class UaaApplicationServer {
+public interface IUserService extends IService<SysUser> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(UaaApplicationServer.class, args);
-        log.info("启动成功：Sa-Token配置如下：" + SaManager.getConfig());
-    }
+    /**
+     * 新增用户
+     *
+     * @param newUser 新用户
+     * @return {@link SysUserVO}
+     */
+    SysUserVO newUsers(SysUserVO newUser);
 }
