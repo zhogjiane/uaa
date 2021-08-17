@@ -21,40 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
--- auto-generated definition
-create schema uaa collate utf8_general_ci;
+/*
+ Navicat Premium Data Transfer
 
-create table sys_oauth2_client
-(
-    id bigint(40) not null comment '主键id'
-        primary key,
-    client_id varchar(100) null comment '客户端id',
-    client_secret varchar(100) null comment '客户端密钥',
-    allow_url varchar(100) null comment '允许访问的地址',
-    contract_scope varchar(100) null comment '契约范围',
-    create_by bigint(40) null comment '创建人',
-    create_time timestamp null comment '创建时间',
-    update_by bigint(40) null comment '更新人',
-    update_time timestamp null comment '更新时间',
-    removed tinyint null comment '是否删除'
-)
-    comment 'Oauth2客户端信息表';
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50732
+ Source Host           : localhost:3306
+ Source Schema         : uaa
 
-create table sys_user
-(
-    id bigint(40) not null
-        primary key,
-    account_name varchar(100) null comment '账户名称',
-    password varchar(100) null comment '密码',
-    real_name varchar(100) null comment '真实名称',
-    sex char(10) null comment '性别',
-    phone_number varchar(20) null comment '手机号',
-    email varchar(50) null comment '邮箱',
-    create_by bigint(40) null comment '创建人',
-    create_time timestamp not null on update CURRENT_TIMESTAMP comment '创建时间',
-    update_by bigint(40) null comment '更新人',
-    update_time timestamp not null comment '更新时间',
-    removed tinyint null comment '是否已删除'
-)
-    comment '系统用户表';
+ Target Server Type    : MySQL
+ Target Server Version : 50732
+ File Encoding         : 65001
+
+ Date: 17/08/2021 17:23:08
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for sys_oauth2_client
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_oauth2_client`;
+CREATE TABLE `sys_oauth2_client`  (
+                                      `id` bigint(40) NOT NULL COMMENT '主键id',
+                                      `client_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端id',
+                                      `client_secret` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端密钥',
+                                      `allow_url` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '允许访问的地址',
+                                      `contract_scope` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '契约范围',
+                                      `create_by` bigint(40) NULL DEFAULT NULL COMMENT '创建人',
+                                      `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+                                      `update_by` bigint(40) NULL DEFAULT NULL COMMENT '更新人',
+                                      `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
+                                      `removed` tinyint(4) NULL DEFAULT NULL COMMENT '是否删除',
+                                      PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Oauth2客户端信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user`  (
+                             `id` bigint(40) NOT NULL,
+                             `account_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账户名称',
+                             `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+                             `real_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '真实名称',
+                             `sex` char(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别',
+                             `phone_number` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+                             `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+                             `create_by` bigint(40) NULL DEFAULT NULL COMMENT '创建人',
+                             `create_time` timestamp(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+                             `update_by` bigint(40) NULL DEFAULT NULL COMMENT '更新人',
+                             `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+                             `removed` tinyint(4) NULL DEFAULT NULL COMMENT '是否已删除',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 
