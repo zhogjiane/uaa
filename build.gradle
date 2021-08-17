@@ -29,7 +29,6 @@ dependencyManagement {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-undertow'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'mysql:mysql-connector-java:8.0.25'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
@@ -41,6 +40,7 @@ dependencies {
     implementation 'cn.dev33:sa-token-spring-boot-starter:1.24.0'
     implementation 'cn.hutool:hutool-all:5.7.7'
     implementation 'cn.dev33:sa-token-dao-redis-jackson:1.24.0'
+    implementation 'cn.dev33:sa-token-oauth2:1.24.0'
     implementation 'org.apache.commons:commons-pool2:2.10.0'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     compileOnly 'org.projectlombok:lombok:1.18.20'
