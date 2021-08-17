@@ -28,21 +28,37 @@ dependencyManagement {
 }
 
 dependencies {
+    // web模块
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 数据校验
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // mysql驱动
     implementation 'mysql:mysql-connector-java:8.0.25'
+    // mybatis
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    // mybatis plus
     implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
+    // druid数据库连接池
     implementation 'com.alibaba:druid-spring-boot-starter:1.2.6'
+    // 配置中心
     implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+    // 服务注册中心
     implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+    // bootstrap文件读取支持
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    // saToken
     implementation 'cn.dev33:sa-token-spring-boot-starter:1.24.0'
+    // hutool工具包
     implementation 'cn.hutool:hutool-all:5.7.7'
+    // saToken redis分布式存储
     implementation 'cn.dev33:sa-token-dao-redis-jackson:1.24.0'
+    // saToken Oauth2
     implementation 'cn.dev33:sa-token-oauth2:1.24.0'
+    // redis连接池
     implementation 'org.apache.commons:commons-pool2:2.10.0'
+    // swagger支持
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    // lombok
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }
