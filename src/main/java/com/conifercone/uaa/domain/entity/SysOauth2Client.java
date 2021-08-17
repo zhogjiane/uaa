@@ -22,27 +22,37 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.configurations;
+package com.conifercone.uaa.domain.entity;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
- * 安全配置类
+ * Oauth2 客户端信息
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/16
+ * @date 2021/8/17
  */
-@Configuration
-public class SecurityConfig {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+@TableName("sys_oauth2_client")
+@ApiModel(value = "Oauth2客户端信息表")
+public class SysOauth2Client extends BaseEntity {
 
-    /*
-     * 注入BCryptPasswordEncoder
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @ApiModelProperty(value = "客户端id")
+    private String clientId;
 
+    @ApiModelProperty(value = "客户密钥")
+    private String clientSecret;
+
+    @ApiModelProperty(value = "允许访问的url地址")
+    private String allowUrl;
+
+    @ApiModelProperty(value = "契约范围")
+    private String contractScope;
 }

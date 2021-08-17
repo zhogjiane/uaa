@@ -22,27 +22,18 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.configurations;
+package com.conifercone.uaa.mapper;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.conifercone.uaa.domain.entity.SysOauth2Client;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 安全配置类
+ * SaOAuth2 client数据库交互
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/16
+ * @date 2021/8/17
  */
-@Configuration
-public class SecurityConfig {
-
-    /*
-     * 注入BCryptPasswordEncoder
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+@Mapper
+public interface SaOAuth2Mapper extends BaseMapper<SysOauth2Client> {
 }

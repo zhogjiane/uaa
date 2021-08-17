@@ -24,18 +24,29 @@
 
 package com.conifercone.uaa.controller;
 
+import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.oauth2.logic.SaOAuth2Handle;
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 认证控制器
+ * OAuth2认证控制器
  *
  * @author sky5486560@gmail.com
  * @date 2021/8/13
  */
 @RestController
-@RequestMapping("/auth")
-@Api(value = "用户认证", tags = "统一认证")
-public class AuthController {
+@RequestMapping("/oauth2")
+@Api(value = "OAuth2用户认证", tags = "OAuth2统一认证")
+@Slf4j
+public class OAuth2Controller {
+
+    // 处理所有OAuth相关请求
+    @RequestMapping("/*")
+    public Object request() {
+        log.info("------- 进入请求: " + SaHolder.getRequest().getUrl());
+        return SaOAuth2Handle.serverRequest();
+    }
 }

@@ -91,6 +91,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultVO<Object> notLoginExceptionHandler() {
         log.error("用户未登录");
-        return new ResultVO<>(ResultCode.USER_NOT_LOGIN,null);
+        return new ResultVO<>(ResultCode.USER_NOT_LOGIN, null);
     }
 }
