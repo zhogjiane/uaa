@@ -10,7 +10,7 @@ plugins {
 
 
 group = 'org.conifercone'
-version = '1.0-SNAPSHOT'
+version = "${PROJECT_VERSION}"
 description = 'uaa'
 sourceCompatibility = '1.8'
 
