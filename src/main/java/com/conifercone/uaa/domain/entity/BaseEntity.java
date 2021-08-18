@@ -27,6 +27,7 @@ package com.conifercone.uaa.domain.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +38,7 @@ import java.time.LocalDateTime;
  * @date 2021/8/12
  */
 @ApiModel(value = "基础实体类")
+@Data
 public class BaseEntity {
 
     @ApiModelProperty(value = "主键id")

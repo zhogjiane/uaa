@@ -24,9 +24,21 @@
 
 package com.conifercone.uaa.configurations;
 
+import cn.dev33.satoken.oauth2.config.SaOAuth2Config;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.util.SaResult;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.conifercone.uaa.domain.entity.SysUser;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.conifercone.uaa.domain.exception.BizException;
+import com.conifercone.uaa.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.annotation.Resource;
 
 /**
  * 安全配置类
@@ -37,6 +49,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
+    @Resource
+    IUserService userService;
+
+    @Resource
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     /*
      * 注入BCryptPasswordEncoder
      */
@@ -45,4 +63,21 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // Sa-OAuth2 定制化配置
+    @Autowired
+    public void setSaOAuth2Config(SaOAuth2Config cfg) {
+        cfg.setDoLoginHandle((name, pwd) -> {
+            LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            sysUserLambdaQueryWrapper.eq(SysUser::getAccountName, name);
+            SysUser sysUser = userService.getOne(sysUserLambdaQueryWrapper);
+            if (ObjectUtil.isEmpty(sysUser)) {
+                throw new BizException(ResultCode.USER_NOT_EXIST);
+            }
+            if (bCryptPasswordEncoder.matches(pwd, sysUser.getPassword())) {
+                StpUtil.login(sysUser.getId());
+                return SaResult.ok();
+            }
+            throw new BizException(ResultCode.USER_LOGIN_FAIL);
+        });
+    }
 }
