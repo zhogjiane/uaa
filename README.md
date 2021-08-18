@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/conifercone/uaa">
-   <img alt="uaa-Logo" src="https://raw.githubusercontent.com/conifercone/images/main/20210818112019.png">
+   <img alt="uaa-Logo" src="https://raw.githubusercontent.com/conifercone/images/main/20210818112933.png">
   </a>
 </p>
 <p align="center">
