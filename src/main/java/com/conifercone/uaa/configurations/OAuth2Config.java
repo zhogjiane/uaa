@@ -26,7 +26,6 @@ package com.conifercone.uaa.configurations;
 
 import cn.dev33.satoken.oauth2.config.SaOAuth2Config;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.conifercone.uaa.domain.entity.SysUser;
@@ -69,7 +68,7 @@ public class OAuth2Config {
             }
             if (bCryptPasswordEncoder.matches(pwd, sysUser.getPassword())) {
                 StpUtil.login(sysUser.getId());
-                return SaResult.ok();
+                return StpUtil.getTokenInfo();
             }
             throw new BizException(ResultCode.USER_LOGIN_FAIL);
         });

@@ -64,6 +64,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
         //密码加密
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         this.save(BeanUtil.copyProperties(newUser, SysUser.class));
+        //去除密码等敏感信息
+        newUser.setPassword("");
         return newUser;
     }
 }

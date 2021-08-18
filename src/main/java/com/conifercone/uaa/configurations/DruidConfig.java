@@ -29,6 +29,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 /**
@@ -44,5 +45,13 @@ public class DruidConfig {
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource druidDataSource() {
         return new DruidDataSource();
+    }
+
+    /*
+     * 解决druid 日志报错：discard long time none received connection:xxx
+     * */
+    @PostConstruct
+    public void setProperties() {
+        System.setProperty("druid.mysql.usePingMethod", "false");
     }
 }
