@@ -10,9 +10,9 @@ plugins {
 
 
 group = 'org.conifercone'
-version = "${PROJECT_VERSION}"
 description = 'uaa'
 sourceCompatibility = '1.8'
+version = "${PROJECT_VERSION}"
 
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public/' }
