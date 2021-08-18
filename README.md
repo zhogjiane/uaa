@@ -1,13 +1,13 @@
-<p style="text-align:center">
+<p align="center">
   <a href="https://github.com/conifercone/uaa">
-   <img style="width: 280px; height: 280px" alt="uaa-Logo" src="https://raw.githubusercontent.com/conifercone/images/main/20210818103222.png">
+   <img style="width: 200px; height: 200px" alt="uaa-Logo" src="https://raw.githubusercontent.com/conifercone/images/main/20210818103222.png">
   </a>
 </p>
-<p style="text-align:center">
-  <a style="text-align:center" href="https://mit-license.org/">
+<p align="center">
+  <a href="https://mit-license.org/">
     <img alt="project License" src="https://img.shields.io/github/license/conifercone/uaa">
   </a>
-  <a style="text-align:center" href="https://mit-license.org/">
+  <a href="https://mit-license.org/">
     <img alt="project License" src="https://img.shields.io/github/languages/count/conifercone/uaa">
   </a>
 </p>
