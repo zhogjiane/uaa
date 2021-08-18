@@ -7,7 +7,7 @@
   <a href="https://mit-license.org/">
     <img alt="project License" src="https://img.shields.io/github/license/conifercone/uaa">
   </a>
-  <a href="https://mit-license.org/">
+  <a href="https://github.com/conifercone/uaa">
     <img alt="project License" src="https://img.shields.io/github/languages/count/conifercone/uaa">
   </a>
 </p>
