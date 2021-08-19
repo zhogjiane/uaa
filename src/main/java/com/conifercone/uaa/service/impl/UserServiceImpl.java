@@ -112,10 +112,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     public IPage<SysUserVO> queryUsersByPagination(Integer pageNo, Integer pageSize, SysUserVO sysUserVO) {
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserLambdaQueryWrapper
-                .like(CharSequenceUtil.isEmpty(sysUserVO.getAccountName()), SysUser::getAccountName, sysUserVO.getAccountName())
-                .like(CharSequenceUtil.isEmpty(sysUserVO.getRealName()), SysUser::getRealName, sysUserVO.getRealName())
-                .like(CharSequenceUtil.isEmpty(sysUserVO.getPhoneNumber()), SysUser::getPhoneNumber, sysUserVO.getPhoneNumber())
-                .like(CharSequenceUtil.isEmpty(sysUserVO.getEmail()), SysUser::getEmail, sysUserVO.getEmail())
+                .like(CharSequenceUtil.isNotEmpty(sysUserVO.getAccountName()), SysUser::getAccountName, sysUserVO.getAccountName())
+                .like(CharSequenceUtil.isNotEmpty(sysUserVO.getRealName()), SysUser::getRealName, sysUserVO.getRealName())
+                .like(CharSequenceUtil.isNotEmpty(sysUserVO.getPhoneNumber()), SysUser::getPhoneNumber, sysUserVO.getPhoneNumber())
+                .like(CharSequenceUtil.isNotEmpty(sysUserVO.getEmail()), SysUser::getEmail, sysUserVO.getEmail())
                 .orderByDesc(SysUser::getUpdateTime);
         Page<SysUser> page = this.page(new Page<>(pageNo, pageSize), sysUserLambdaQueryWrapper);
         List<SysUser> sysUserList = page.getRecords();

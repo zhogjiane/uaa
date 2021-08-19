@@ -63,7 +63,7 @@ public class UserController {
         return userService.deleteUsers(sysUserIdList);
     }
 
-    @PostMapping
+    @PutMapping
     @ApiOperation("修改用户")
     public SysUserVO modifyUser(@RequestBody SysUserVO newUser) {
         return userService.modifyUser(newUser);
