@@ -24,9 +24,12 @@
 
 package com.conifercone.uaa.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.conifercone.uaa.domain.entity.SysUser;
 import com.conifercone.uaa.domain.vo.SysUserVO;
+
+import java.util.List;
 
 /**
  * 用户service
@@ -43,4 +46,33 @@ public interface IUserService extends IService<SysUser> {
      * @return {@link SysUserVO}
      */
     SysUserVO newUsers(SysUserVO newUser);
+
+
+    /**
+     * 删除用户
+     *
+     * @param sysUserIdList 系统用户id集合
+     * @return {@link Boolean}
+     */
+    Boolean deleteUsers(List<Long> sysUserIdList);
+
+
+    /**
+     * 修改用户
+     *
+     * @param newUser 新用户
+     * @return {@link SysUserVO}
+     */
+    SysUserVO modifyUser(SysUserVO newUser);
+
+
+    /**
+     * 查询用户分页
+     *
+     * @param pageNo    当前页
+     * @param pageSize  页面大小
+     * @param sysUserVO 系统用户值对象
+     * @return {@link IPage}<{@link SysUserVO}>
+     */
+    IPage<SysUserVO> queryUsersByPagination(Integer pageNo,Integer pageSize,SysUserVO sysUserVO);
 }

@@ -24,18 +24,17 @@
 
 package com.conifercone.uaa.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.domain.vo.SysUserVO;
 import com.conifercone.uaa.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 用户逻辑控制
@@ -56,5 +55,23 @@ public class UserController {
     @ApiOperation("新增用户")
     public SysUserVO newUsers(@RequestBody @Valid SysUserVO newUser) {
         return userService.newUsers(newUser);
+    }
+
+    @DeleteMapping
+    @ApiOperation("删除用户")
+    public Boolean deleteUsers(@RequestBody List<Long> sysUserIdList) {
+        return userService.deleteUsers(sysUserIdList);
+    }
+
+    @PostMapping
+    @ApiOperation("修改用户")
+    public SysUserVO modifyUser(@RequestBody SysUserVO newUser) {
+        return userService.modifyUser(newUser);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation("分页查询用户")
+    public IPage<SysUserVO> queryUsersByPagination(Integer pageNo, Integer pageSize, SysUserVO sysUserVO) {
+        return userService.queryUsersByPagination(pageNo, pageSize, sysUserVO);
     }
 }

@@ -25,6 +25,11 @@
 package com.conifercone.uaa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysUser;
 import com.conifercone.uaa.domain.vo.SysUserVO;
@@ -37,6 +42,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 用户service实现
@@ -67,5 +75,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
         //去除密码等敏感信息
         newUser.setPassword("");
         return newUser;
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param sysUserIdList 系统用户id列表
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteUsers(List<Long> sysUserIdList) {
+        return this.removeByIds(sysUserIdList);
+    }
+
+    /**
+     * 修改用户
+     *
+     * @param newUser 新用户
+     * @return {@link SysUserVO}
+     */
+    @Override
+    public SysUserVO modifyUser(SysUserVO newUser) {
+        this.updateById(BeanUtil.copyProperties(newUser, SysUser.class));
+        return newUser;
+    }
+
+    /**
+     * 查询用户分页
+     *
+     * @param pageNo    当前页
+     * @param pageSize  页面大小
+     * @param sysUserVO 系统用户签证官
+     * @return {@link IPage}<{@link SysUserVO}>
+     */
+    @Override
+    public IPage<SysUserVO> queryUsersByPagination(Integer pageNo, Integer pageSize, SysUserVO sysUserVO) {
+        LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysUserLambdaQueryWrapper
+                .like(CharSequenceUtil.isEmpty(sysUserVO.getAccountName()), SysUser::getAccountName, sysUserVO.getAccountName())
+                .like(CharSequenceUtil.isEmpty(sysUserVO.getRealName()), SysUser::getRealName, sysUserVO.getRealName())
+                .like(CharSequenceUtil.isEmpty(sysUserVO.getPhoneNumber()), SysUser::getPhoneNumber, sysUserVO.getPhoneNumber())
+                .like(CharSequenceUtil.isEmpty(sysUserVO.getEmail()), SysUser::getEmail, sysUserVO.getEmail())
+                .orderByDesc(SysUser::getUpdateTime);
+        Page<SysUser> page = this.page(new Page<>(pageNo, pageSize), sysUserLambdaQueryWrapper);
+        List<SysUser> sysUserList = page.getRecords();
+        IPage<SysUserVO> sysUserVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        List<SysUserVO> sysUserVOList = Optional.ofNullable(sysUserList).orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysUser -> BeanUtil.copyProperties(sysUser, SysUserVO.class))
+                .collect(Collectors.toList());
+        sysUserVOPage.setRecords(sysUserVOList);
+        return sysUserVOPage;
     }
 }
