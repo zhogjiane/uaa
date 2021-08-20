@@ -128,7 +128,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
      *
      * @param pageNo    当前页
      * @param pageSize  页面大小
-     * @param sysUserVO 系统用户签证官
+     * @param sysUserVO 系统用户值对象
      * @return {@link IPage}<{@link SysUserVO}>
      */
     @Override
