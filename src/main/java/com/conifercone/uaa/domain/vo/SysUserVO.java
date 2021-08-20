@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.core.injector.methods.Insert;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
@@ -44,24 +45,33 @@ import javax.validation.constraints.Pattern;
  */
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户值对象")
-public class SysUserVO {
+public class SysUserVO extends BaseVO {
 
     @ApiModelProperty(value = "账户名称")
+    @NotBlank(message = "账户名称不能为空", groups = {Insert.class})
+    @NotNull(message = "账户名称不能为空", groups = {Insert.class})
     private String accountName;
 
     @ApiModelProperty(value = "密码")
+    @NotBlank(message = "密码不能为空", groups = {Insert.class})
+    @NotNull(message = "密码不能为空", groups = {Insert.class})
     private String password;
 
     @ApiModelProperty(value = "真实姓名")
+    @NotBlank(message = "真实姓名不能为空", groups = {Insert.class})
+    @NotNull(message = "真实姓名不能为空", groups = {Insert.class})
     private String realName;
 
     @ApiModelProperty(value = "性别")
+    @NotBlank(message = "性别不能为空", groups = {Insert.class})
+    @NotNull(message = "性别不能为空", groups = {Insert.class})
     private String sex;
 
     @ApiModelProperty(value = "手机号")
     @NotBlank(message = "手机号码不能为空", groups = {Insert.class})
-    @NotNull(message = "手机号不能为空", groups = {Insert.class})
+    @NotNull(message = "手机号码不能为空", groups = {Insert.class})
     @Length(min = 11, max = 11, message = "手机号只能为11位")
     @Pattern(regexp = "^1(3\\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\\d|9[0-35-9])\\d{8}$", message = "手机号格式有误")
     private String phoneNumber;

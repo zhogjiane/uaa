@@ -24,40 +24,41 @@
 
 package com.conifercone.uaa.domain.vo;
 
-import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.baomidou.mybatisplus.core.injector.methods.Insert;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
- * 自定义统一响应体
+ * OAuth2客户端信息值对象
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/13
+ * @date 2021/8/20
  */
 @Data
-public class ResultVO<T> {
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "OAuth2客户端信息值对象")
+public class SysOAuth2ClientVO extends BaseVO{
 
-    /**
-     * 状态码，比如1000 代表响应成功
-     */
-    private int code;
+    @ApiModelProperty(value = "客户端id")
+    @NotBlank(message = "客户端id不能为空", groups = {Insert.class})
+    @NotNull(message = "客户端id不能为空", groups = {Insert.class})
+    private String clientId;
 
-    /**
-     * 响应信息，用来说明响应情况
-     */
-    private String msg;
+    @ApiModelProperty(value = "客户密钥")
+    @NotBlank(message = "客户密钥不能为空", groups = {Insert.class})
+    @NotNull(message = "客户密钥不能为空", groups = {Insert.class})
+    private String clientSecret;
 
-    /**
-     * 响应的具体数据
-     */
-    private T data;
+    @ApiModelProperty(value = "允许访问的url地址")
+    private String allowUrl;
 
-    public ResultVO(T data) {
-        this(ResultCode.SUCCESS, data);
-    }
-
-    public ResultVO(ResultCode resultCode, T data) {
-        this.code = resultCode.getCode();
-        this.msg = resultCode.getMsg();
-        this.data = data;
-    }
+    @ApiModelProperty(value = "契约范围")
+    private String contractScope;
 }

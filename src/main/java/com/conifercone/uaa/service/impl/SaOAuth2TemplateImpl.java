@@ -28,7 +28,7 @@ import cn.dev33.satoken.oauth2.logic.SaOAuth2Template;
 import cn.dev33.satoken.oauth2.model.SaClientModel;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.conifercone.uaa.domain.entity.SysOauth2Client;
+import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.mapper.SaOAuth2Mapper;
@@ -56,9 +56,9 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
      */
     @Override
     public SaClientModel getClientModel(String clientId) {
-        LambdaQueryWrapper<SysOauth2Client> sysOauth2ClientQueryWrapper = new LambdaQueryWrapper<>();
-        sysOauth2ClientQueryWrapper.eq(SysOauth2Client::getClientId, clientId);
-        SysOauth2Client sysOauth2Client = saOAuth2Mapper.selectOne(sysOauth2ClientQueryWrapper);
+        LambdaQueryWrapper<SysOAuth2Client> sysOauth2ClientQueryWrapper = new LambdaQueryWrapper<>();
+        sysOauth2ClientQueryWrapper.eq(SysOAuth2Client::getClientId, clientId);
+        SysOAuth2Client sysOauth2Client = saOAuth2Mapper.selectOne(sysOauth2ClientQueryWrapper);
         if (ObjectUtil.isNotNull(sysOauth2Client)) {
             return new SaClientModel()
                     .setClientId(sysOauth2Client.getClientId())
@@ -78,7 +78,6 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
      */
     @Override
     public String getOpenid(String clientId, Object loginId) {
-        // TODO openid待集成
         return "gr_SwoIN0MC1ewxHX_vfCW3BothWDZMMtx__";
     }
 }

@@ -25,7 +25,7 @@
 package com.conifercone.uaa.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.conifercone.uaa.domain.entity.SysOauth2Client;
+import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -35,5 +35,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2021/8/17
  */
 @Mapper
-public interface SaOAuth2Mapper extends BaseMapper<SysOauth2Client> {
+public interface SaOAuth2Mapper extends BaseMapper<SysOAuth2Client> {
 }

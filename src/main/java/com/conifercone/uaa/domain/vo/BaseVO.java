@@ -22,37 +22,41 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.domain.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
- * Oauth2 客户端信息
+ * 基础值对象
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/17
+ * @date 2021/8/20
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@TableName("sys_oauth2_client")
-@ApiModel(value = "Oauth2客户端信息表")
-public class SysOauth2Client extends BaseEntity {
+@ApiModel(value = "基础值对象")
+public class BaseVO {
 
-    @ApiModelProperty(value = "客户端id")
-    private String clientId;
+    @ApiModelProperty(value = "主键id")
+    protected Long id;
 
-    @ApiModelProperty(value = "客户密钥")
-    private String clientSecret;
+    @ApiModelProperty(value = "创建人")
+    protected Long createBy;
 
-    @ApiModelProperty(value = "允许访问的url地址")
-    private String allowUrl;
+    @ApiModelProperty(value = "创建时间")
+    protected LocalDateTime createTime;
 
-    @ApiModelProperty(value = "契约范围")
-    private String contractScope;
+    @ApiModelProperty(value = "修改人")
+    protected Long updateBy;
+
+    @ApiModelProperty(value = "修改时间")
+    protected LocalDateTime updateTime;
+
+    @TableLogic(value = "0", delval = "1")
+    @ApiModelProperty(value = "删除标识")
+    protected Boolean removed;
 }

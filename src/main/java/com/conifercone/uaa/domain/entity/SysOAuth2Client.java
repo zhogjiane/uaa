@@ -22,42 +22,37 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.vo;
+package com.conifercone.uaa.domain.entity;
 
-import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
- * 自定义统一响应体
+ * OAuth2 客户端信息
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/13
+ * @date 2021/8/17
  */
 @Data
-public class ResultVO<T> {
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+@TableName("sys_oauth2_client")
+@ApiModel(value = "OAuth2客户端信息表")
+public class SysOAuth2Client extends BaseEntity {
 
-    /**
-     * 状态码，比如1000 代表响应成功
-     */
-    private int code;
+    @ApiModelProperty(value = "客户端id")
+    private String clientId;
 
-    /**
-     * 响应信息，用来说明响应情况
-     */
-    private String msg;
+    @ApiModelProperty(value = "客户密钥")
+    private String clientSecret;
 
-    /**
-     * 响应的具体数据
-     */
-    private T data;
+    @ApiModelProperty(value = "允许访问的url地址")
+    private String allowUrl;
 
-    public ResultVO(T data) {
-        this(ResultCode.SUCCESS, data);
-    }
-
-    public ResultVO(ResultCode resultCode, T data) {
-        this.code = resultCode.getCode();
-        this.msg = resultCode.getMsg();
-        this.data = data;
-    }
+    @ApiModelProperty(value = "契约范围")
+    private String contractScope;
 }
