@@ -25,6 +25,8 @@
 package com.conifercone.uaa;
 
 import cn.dev33.satoken.SaManager;
+import com.alicp.jetcache.anno.config.EnableCreateCacheAnnotation;
+import com.alicp.jetcache.anno.config.EnableMethodCache;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -41,6 +43,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan(basePackages = {"com.conifercone.uaa.mapper"})
+@EnableMethodCache(basePackages = "com.conifercone.uaa")
+@EnableCreateCacheAnnotation
 public class UaaApplicationServer {
 
     public static void main(String[] args) {

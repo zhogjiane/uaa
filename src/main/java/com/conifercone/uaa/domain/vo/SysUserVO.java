@@ -36,6 +36,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * 用户值对象
@@ -47,7 +48,9 @@ import javax.validation.constraints.Pattern;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户值对象")
-public class SysUserVO extends BaseVO {
+public class SysUserVO extends BaseVO implements Serializable {
+
+    private static final long serialVersionUID = 1312152314252356342L;
 
     @ApiModelProperty(value = "账户名称")
     @NotBlank(message = "账户名称不能为空", groups = {Insert.class})

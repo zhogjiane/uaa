@@ -24,6 +24,8 @@
 
 package com.conifercone.uaa.configurations;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,11 +40,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig {
 
     /*
-     * 注入BCryptPasswordEncoder
+     * 定义BCryptPasswordEncoder实例
      */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /*
+     * 定义雪花算法bean实例
+     */
+    @Bean
+    public Snowflake snowflake() {
+        return IdUtil.getSnowflake();
     }
 
 }

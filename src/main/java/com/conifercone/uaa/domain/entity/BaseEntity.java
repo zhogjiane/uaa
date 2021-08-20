@@ -42,7 +42,7 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @ApiModelProperty(value = "主键id")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.INPUT)
     protected Long id;
 
     @ApiModelProperty(value = "创建人")

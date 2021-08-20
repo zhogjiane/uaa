@@ -26,7 +26,11 @@ package com.conifercone.uaa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -60,6 +64,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Resource
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "user:")
+    private Cache<Long, SysUserVO> userCache;
+
+    @Resource
+    Snowflake snowflake;
+
     /**
      * 新增用户
      *
@@ -69,12 +79,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysUserVO newUsers(SysUserVO newUser) {
+        //设置用户id
+        long id = snowflake.nextId();
+        newUser.setId(id);
         //密码加密
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        this.save(BeanUtil.copyProperties(newUser, SysUser.class));
+        SysUser sysUser = BeanUtil.copyProperties(newUser, SysUser.class);
+        //保存用户信息
+        this.save(sysUser);
+        SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(id), SysUserVO.class);
         //去除密码等敏感信息
-        newUser.setPassword("");
-        return newUser;
+        sysUserVO.setPassword("");
+        userCache.PUT(sysUserVO.getId(), sysUserVO);
+        return sysUserVO;
     }
 
     /**
