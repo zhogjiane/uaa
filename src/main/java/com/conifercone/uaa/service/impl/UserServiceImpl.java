@@ -29,6 +29,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.CacheResult;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -46,6 +47,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,7 +104,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
      */
     @Override
     public Boolean deleteUsers(List<Long> sysUserIdList) {
-        return this.removeByIds(sysUserIdList);
+        boolean remove = this.removeByIds(sysUserIdList);
+        CacheResult cacheResult = userCache.REMOVE_ALL(new HashSet<>(sysUserIdList));
+        return remove && cacheResult.isSuccess();
     }
 
     /**
@@ -114,7 +118,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Override
     public SysUserVO modifyUser(SysUserVO newUser) {
         this.updateById(BeanUtil.copyProperties(newUser, SysUser.class));
-        return newUser;
+        SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(newUser.getId()), SysUserVO.class);
+        userCache.PUT(newUser.getId(), sysUserVO);
+        return sysUserVO;
     }
 
     /**
