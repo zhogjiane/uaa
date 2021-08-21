@@ -59,6 +59,7 @@ public class OAuth2Config {
     // Sa-OAuth2 定制化配置
     @Autowired
     public void setSaOAuth2Config(SaOAuth2Config cfg) {
+        //设置登录验证逻辑
         cfg.setDoLoginHandle((name, pwd) -> {
             LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
             sysUserLambdaQueryWrapper.eq(SysUser::getAccountName, name);
@@ -68,7 +69,7 @@ public class OAuth2Config {
             }
             if (bCryptPasswordEncoder.matches(pwd, sysUser.getPassword())) {
                 StpUtil.login(sysUser.getId());
-                return StpUtil.getTokenInfo();
+                return name;
             }
             throw new BizException(ResultCode.USER_LOGIN_FAIL);
         });
