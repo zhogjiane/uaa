@@ -25,6 +25,7 @@
 package com.conifercone.uaa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
@@ -38,6 +39,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * OAuth2客户端service实现
@@ -69,5 +74,23 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2Mapper, SysOAuth2
         SysOAuth2ClientVO newSysOAuth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
         oauth2ClientCache.PUT(id, newSysOAuth2ClientVO);
         return newSysOAuth2ClientVO;
+    }
+
+    /**
+     * 删除oauth2客户端
+     *
+     * @param oauth2ClientIdList oauth2客户端id列表
+     * @return {@link List}<{@link SysOAuth2ClientVO}>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysOAuth2ClientVO> deleteOAuth2Client(List<Long> oauth2ClientIdList) {
+        List<SysOAuth2Client> sysOAuth2Clients = this.listByIds(oauth2ClientIdList);
+        oauth2ClientCache.REMOVE_ALL(new HashSet<>(oauth2ClientIdList));
+        this.removeByIds(oauth2ClientIdList);
+        return Optional.ofNullable(sysOAuth2Clients).orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysOAuth2Client -> BeanUtil.copyProperties(sysOAuth2Client, SysOAuth2ClientVO.class))
+                .collect(Collectors.toList());
     }
 }

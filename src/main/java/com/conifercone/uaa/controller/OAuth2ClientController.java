@@ -28,13 +28,11 @@ import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
 import com.conifercone.uaa.service.IOAuth2ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * OAuth2客户端
@@ -55,5 +53,11 @@ public class OAuth2ClientController {
     @ApiOperation(value = "新增OAuth2客户端", tags = "OAuth2客户端")
     public SysOAuth2ClientVO newOAuth2Client(@RequestBody @Valid SysOAuth2ClientVO sysOAuth2ClientVO) {
         return oauth2ClientService.newOAuth2Client(sysOAuth2ClientVO);
+    }
+
+    @DeleteMapping
+    @ApiOperation(value = "删除OAuth2客户端", tags = "OAuth2客户端")
+    public List<SysOAuth2ClientVO> deleteOAuth2Client(@RequestBody List<Long> oauth2ClientIdList) {
+        return oauth2ClientService.deleteOAuth2Client(oauth2ClientIdList);
     }
 }

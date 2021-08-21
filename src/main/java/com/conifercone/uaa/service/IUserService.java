@@ -52,9 +52,9 @@ public interface IUserService extends IService<SysUser> {
      * 删除用户
      *
      * @param sysUserIdList 系统用户id集合
-     * @return {@link Boolean}
+     * @return {@link List}<{@link SysUserVO}>
      */
-    Boolean deleteUsers(List<Long> sysUserIdList);
+    List<SysUserVO> deleteUsers(List<Long> sysUserIdList);
 
 
     /**

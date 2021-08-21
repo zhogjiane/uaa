@@ -28,6 +28,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
 
+import java.util.List;
+
 /**
  * OAuth2客户端service
  *
@@ -43,5 +45,14 @@ public interface IOAuth2ClientService extends IService<SysOAuth2Client> {
      * @return {@link SysOAuth2ClientVO}
      */
     SysOAuth2ClientVO newOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO);
+
+
+    /**
+     * 删除oauth2客户端
+     *
+     * @param oauth2ClientIdList oauth2客户端id列表
+     * @return {@link List}<{@link SysOAuth2ClientVO}>
+     */
+    List<SysOAuth2ClientVO> deleteOAuth2Client(List<Long> oauth2ClientIdList);
 
 }

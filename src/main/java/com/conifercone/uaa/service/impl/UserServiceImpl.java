@@ -29,7 +29,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alicp.jetcache.Cache;
-import com.alicp.jetcache.CacheResult;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -100,14 +99,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
      * 删除用户
      *
      * @param sysUserIdList 系统用户id列表
-     * @return {@link Boolean}
+     * @return {@link List}<{@link SysUserVO}>
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean deleteUsers(List<Long> sysUserIdList) {
-        boolean remove = this.removeByIds(sysUserIdList);
-        CacheResult cacheResult = userCache.REMOVE_ALL(new HashSet<>(sysUserIdList));
-        return remove && cacheResult.isSuccess();
+    public List<SysUserVO> deleteUsers(List<Long> sysUserIdList) {
+        List<SysUser> sysUsers = this.listByIds(sysUserIdList);
+        this.removeByIds(sysUserIdList);
+        userCache.REMOVE_ALL(new HashSet<>(sysUserIdList));
+        return Optional.ofNullable(sysUsers).orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysUser -> BeanUtil.copyProperties(sysUser, SysUserVO.class))
+                .collect(Collectors.toList());
     }
 
     /**

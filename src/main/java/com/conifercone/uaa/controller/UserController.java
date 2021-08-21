@@ -59,7 +59,7 @@ public class UserController {
 
     @DeleteMapping
     @ApiOperation("删除用户")
-    public Boolean deleteUsers(@RequestBody List<Long> sysUserIdList) {
+    public List<SysUserVO> deleteUsers(@RequestBody List<Long> sysUserIdList) {
         return userService.deleteUsers(sysUserIdList);
     }
 
