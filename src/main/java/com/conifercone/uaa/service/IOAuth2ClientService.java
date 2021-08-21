@@ -55,4 +55,14 @@ public interface IOAuth2ClientService extends IService<SysOAuth2Client> {
      */
     List<SysOAuth2ClientVO> deleteOAuth2Client(List<Long> oauth2ClientIdList);
 
+
+    /**
+     * 修改oauth2客户端
+     *
+     * @param sysOAuth2ClientVO oauth2客户端值对象
+     * @return {@link SysOAuth2ClientVO}
+     */
+    SysOAuth2ClientVO modifyOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO);
+
+
 }

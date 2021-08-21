@@ -60,4 +60,10 @@ public class OAuth2ClientController {
     public List<SysOAuth2ClientVO> deleteOAuth2Client(@RequestBody List<Long> oauth2ClientIdList) {
         return oauth2ClientService.deleteOAuth2Client(oauth2ClientIdList);
     }
+
+    @PutMapping
+    @ApiOperation(value = "修改OAuth2客户端", tags = "OAuth2客户端")
+    public SysOAuth2ClientVO modifyOAuth2Client(@RequestBody @Valid SysOAuth2ClientVO sysOAuth2ClientVO) {
+        return oauth2ClientService.modifyOAuth2Client(sysOAuth2ClientVO);
+    }
 }

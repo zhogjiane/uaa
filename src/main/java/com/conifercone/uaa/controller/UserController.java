@@ -65,7 +65,7 @@ public class UserController {
 
     @PutMapping
     @ApiOperation("修改用户")
-    public SysUserVO modifyUser(@RequestBody SysUserVO newUser) {
+    public SysUserVO modifyUser(@RequestBody @Valid SysUserVO newUser) {
         return userService.modifyUser(newUser);
     }
 

@@ -93,4 +93,20 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2Mapper, SysOAuth2
                 .map(sysOAuth2Client -> BeanUtil.copyProperties(sysOAuth2Client, SysOAuth2ClientVO.class))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 修改oauth2客户端
+     *
+     * @param sysOAuth2ClientVO oauth2客户端值对象
+     * @return {@link SysOAuth2ClientVO}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysOAuth2ClientVO modifyOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO) {
+        Long id = sysOAuth2ClientVO.getId();
+        this.updateById(BeanUtil.copyProperties(sysOAuth2ClientVO, SysOAuth2Client.class));
+        SysOAuth2ClientVO oauth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
+        oauth2ClientCache.PUT(id, oauth2ClientVO);
+        return oauth2ClientVO;
+    }
 }
