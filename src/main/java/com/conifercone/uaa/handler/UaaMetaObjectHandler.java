@@ -26,6 +26,7 @@ package com.conifercone.uaa.handler;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.conifercone.uaa.util.TenantUtil;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class UaaMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "createBy", Long.class, StpUtil.getLoginIdAsLong());
         this.strictInsertFill(metaObject, "updateBy", Long.class, StpUtil.getLoginIdAsLong());
+        this.strictInsertFill(metaObject, "tenantId", Long.class, TenantUtil.getLoginUserTenantId());
     }
 
     @Override

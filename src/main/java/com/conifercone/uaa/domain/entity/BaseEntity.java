@@ -65,4 +65,8 @@ public class BaseEntity {
     @TableField("removed")
     @ApiModelProperty(value = "删除标识")
     protected Boolean removed;
+
+    @ApiModelProperty(value = "租户id")
+    @TableField(value = "tenant_id", fill = FieldFill.INSERT)
+    protected Long tenantId;
 }

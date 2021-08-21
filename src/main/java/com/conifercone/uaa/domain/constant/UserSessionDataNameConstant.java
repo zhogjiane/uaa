@@ -22,44 +22,22 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.vo;
-
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
-import java.time.LocalDateTime;
+package com.conifercone.uaa.domain.constant;
 
 /**
- * 基础值对象
+ * 登录用户Session数据名称常量
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/20
+ * @date 2021/8/21
  */
-@Data
-@ApiModel(value = "基础值对象")
-public class BaseVO {
+public class UserSessionDataNameConstant {
 
-    @ApiModelProperty(value = "主键id")
-    protected Long id;
+    private UserSessionDataNameConstant() {
+    }
 
-    @ApiModelProperty(value = "创建人")
-    protected Long createBy;
+    /**
+     * 租户id
+     */
+    public static final String TENANT_ID = "tenantId";
 
-    @ApiModelProperty(value = "创建时间")
-    protected LocalDateTime createTime;
-
-    @ApiModelProperty(value = "修改人")
-    protected Long updateBy;
-
-    @ApiModelProperty(value = "修改时间")
-    protected LocalDateTime updateTime;
-
-    @TableLogic(value = "0", delval = "1")
-    @ApiModelProperty(value = "删除标识")
-    protected Boolean removed;
-
-    @ApiModelProperty(value = "租户id")
-    protected Long tenantId;
 }

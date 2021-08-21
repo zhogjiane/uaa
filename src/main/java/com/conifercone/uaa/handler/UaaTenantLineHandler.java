@@ -22,44 +22,32 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.vo;
+package com.conifercone.uaa.handler;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import com.conifercone.uaa.domain.constant.TenantConstant;
+import com.conifercone.uaa.util.TenantUtil;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.LongValue;
 
-import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
- * 基础值对象
+ * uaa多租户处理器
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/20
+ * @date 2021/8/21
  */
-@Data
-@ApiModel(value = "基础值对象")
-public class BaseVO {
+public class UaaTenantLineHandler implements TenantLineHandler {
 
-    @ApiModelProperty(value = "主键id")
-    protected Long id;
 
-    @ApiModelProperty(value = "创建人")
-    protected Long createBy;
+    @Override
+    public Expression getTenantId() {
+        return new LongValue(TenantUtil.getLoginUserTenantId());
+    }
 
-    @ApiModelProperty(value = "创建时间")
-    protected LocalDateTime createTime;
-
-    @ApiModelProperty(value = "修改人")
-    protected Long updateBy;
-
-    @ApiModelProperty(value = "修改时间")
-    protected LocalDateTime updateTime;
-
-    @TableLogic(value = "0", delval = "1")
-    @ApiModelProperty(value = "删除标识")
-    protected Boolean removed;
-
-    @ApiModelProperty(value = "租户id")
-    protected Long tenantId;
+    @Override
+    public boolean ignoreTable(String tableName) {
+        return Arrays.stream(TenantConstant.IGNORE_TENANT_TABLES).anyMatch(e -> e.equalsIgnoreCase(tableName));
+    }
 }
