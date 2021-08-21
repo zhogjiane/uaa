@@ -24,6 +24,7 @@
 
 package com.conifercone.uaa.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
@@ -64,5 +65,13 @@ public interface IOAuth2ClientService extends IService<SysOAuth2Client> {
      */
     SysOAuth2ClientVO modifyOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO);
 
-
+    /**
+     * 分页查询oauth2客户端
+     *
+     * @param pageNo            当前页
+     * @param pageSize          页面大小
+     * @param sysOAuth2ClientVO oauth2客户端值对象
+     * @return {@link IPage}<{@link SysOAuth2ClientVO}>
+     */
+    IPage<SysOAuth2ClientVO> pagingQueryOAuth2Client(Integer pageNo, Integer pageSize, SysOAuth2ClientVO sysOAuth2ClientVO);
 }

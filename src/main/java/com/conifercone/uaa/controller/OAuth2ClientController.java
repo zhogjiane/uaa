@@ -24,6 +24,7 @@
 
 package com.conifercone.uaa.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
 import com.conifercone.uaa.service.IOAuth2ClientService;
 import io.swagger.annotations.Api;
@@ -65,5 +66,11 @@ public class OAuth2ClientController {
     @ApiOperation(value = "修改OAuth2客户端", tags = "OAuth2客户端")
     public SysOAuth2ClientVO modifyOAuth2Client(@RequestBody @Valid SysOAuth2ClientVO sysOAuth2ClientVO) {
         return oauth2ClientService.modifyOAuth2Client(sysOAuth2ClientVO);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation(value = "分页查询OAuth2客户端", tags = "OAuth2客户端")
+    public IPage<SysOAuth2ClientVO> pagingQueryOAuth2Client(Integer pageNo, Integer pageSize, SysOAuth2ClientVO sysOAuth2ClientVO) {
+        return oauth2ClientService.pagingQueryOAuth2Client(pageNo, pageSize, sysOAuth2ClientVO);
     }
 }

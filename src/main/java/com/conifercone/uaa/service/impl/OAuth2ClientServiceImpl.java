@@ -27,9 +27,13 @@ package com.conifercone.uaa.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
@@ -108,5 +112,32 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2Mapper, SysOAuth2
         SysOAuth2ClientVO oauth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
         oauth2ClientCache.PUT(id, oauth2ClientVO);
         return oauth2ClientVO;
+    }
+
+    /**
+     * 分页查询oauth2客户端
+     *
+     * @param pageNo            当前页
+     * @param pageSize          页面大小
+     * @param sysOAuth2ClientVO oauth2客户端值对象
+     * @return {@link IPage}<{@link SysOAuth2ClientVO}>
+     */
+    @Override
+    public IPage<SysOAuth2ClientVO> pagingQueryOAuth2Client(Integer pageNo, Integer pageSize, SysOAuth2ClientVO sysOAuth2ClientVO) {
+        LambdaQueryWrapper<SysOAuth2Client> sysOAuth2ClientLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysOAuth2ClientLambdaQueryWrapper
+                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getClientId()), SysOAuth2Client::getClientId, sysOAuth2ClientVO.getClientId());
+        sysOAuth2ClientLambdaQueryWrapper
+                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getAllowUrl()), SysOAuth2Client::getAllowUrl, sysOAuth2ClientVO.getAllowUrl());
+        sysOAuth2ClientLambdaQueryWrapper
+                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getContractScope()), SysOAuth2Client::getContractScope, sysOAuth2ClientVO.getContractScope());
+        Page<SysOAuth2Client> page = this.page(new Page<>(pageNo, pageSize), sysOAuth2ClientLambdaQueryWrapper);
+        IPage<SysOAuth2ClientVO> sysOAuth2ClientVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        List<SysOAuth2ClientVO> sysOAuth2ClientVOList = Optional.ofNullable(page.getRecords()).orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysOAuth2Client -> BeanUtil.copyProperties(sysOAuth2Client, SysOAuth2ClientVO.class))
+                .collect(Collectors.toList());
+        sysOAuth2ClientVOPage.setRecords(sysOAuth2ClientVOList);
+        return sysOAuth2ClientVOPage;
     }
 }
