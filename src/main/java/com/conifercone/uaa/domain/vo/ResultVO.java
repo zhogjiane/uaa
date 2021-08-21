@@ -25,6 +25,8 @@
 package com.conifercone.uaa.domain.vo;
 
 import com.conifercone.uaa.domain.enumerate.ResultCode;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -34,21 +36,16 @@ import lombok.Data;
  * @date 2021/8/13
  */
 @Data
+@ApiModel(value = "自定义统一响应体")
 public class ResultVO<T> {
 
-    /**
-     * 状态码，比如1000 代表响应成功
-     */
+    @ApiModelProperty(value = "状态码，比如1000 代表响应成功")
     private int code;
 
-    /**
-     * 响应信息，用来说明响应情况
-     */
+    @ApiModelProperty(value = "响应信息，用来说明响应情况")
     private String msg;
 
-    /**
-     * 响应的具体数据
-     */
+    @ApiModelProperty(value = "响应的具体数据")
     private T data;
 
     public ResultVO(T data) {
