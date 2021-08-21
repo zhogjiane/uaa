@@ -31,8 +31,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
-import com.conifercone.uaa.mapper.SaOAuth2Mapper;
-import org.springframework.stereotype.Service;
+import com.conifercone.uaa.mapper.OAuth2Mapper;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
@@ -42,11 +42,11 @@ import javax.annotation.Resource;
  * @author sky5486560@gmail.com
  * @date 2021/8/17
  */
-@Service
+@Component
 public class SaOAuth2TemplateImpl extends SaOAuth2Template {
 
     @Resource
-    SaOAuth2Mapper saOAuth2Mapper;
+    OAuth2Mapper oauth2Mapper;
 
     /**
      * 根据 id 获取 Client 信息
@@ -58,7 +58,7 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
     public SaClientModel getClientModel(String clientId) {
         LambdaQueryWrapper<SysOAuth2Client> sysOauth2ClientQueryWrapper = new LambdaQueryWrapper<>();
         sysOauth2ClientQueryWrapper.eq(SysOAuth2Client::getClientId, clientId);
-        SysOAuth2Client sysOauth2Client = saOAuth2Mapper.selectOne(sysOauth2ClientQueryWrapper);
+        SysOAuth2Client sysOauth2Client = oauth2Mapper.selectOne(sysOauth2ClientQueryWrapper);
         if (ObjectUtil.isNotNull(sysOauth2Client)) {
             return new SaClientModel()
                     .setClientId(sysOauth2Client.getClientId())

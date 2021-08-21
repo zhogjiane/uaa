@@ -44,7 +44,7 @@ import javax.validation.constraints.NotNull;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "OAuth2客户端信息值对象")
-public class SysOAuth2ClientVO extends BaseVO{
+public class SysOAuth2ClientVO extends BaseVO {
 
     @ApiModelProperty(value = "客户端id")
     @NotBlank(message = "客户端id不能为空", groups = {Insert.class})

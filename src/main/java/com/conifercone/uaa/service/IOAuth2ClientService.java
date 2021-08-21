@@ -24,55 +24,24 @@
 
 package com.conifercone.uaa.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.conifercone.uaa.domain.entity.SysUser;
-import com.conifercone.uaa.domain.vo.SysUserVO;
-
-import java.util.List;
+import com.conifercone.uaa.domain.entity.SysOAuth2Client;
+import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
 
 /**
- * 用户service
+ * OAuth2客户端service
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/16
+ * @date 2021/8/21
  */
-public interface IUserService extends IService<SysUser> {
+public interface IOAuth2ClientService extends IService<SysOAuth2Client> {
 
     /**
-     * 新增用户
+     * 新建oauth2客户端
      *
-     * @param newUser 新用户
-     * @return {@link SysUserVO}
+     * @param sysOAuth2ClientVO oauth2客户端值对象
+     * @return {@link SysOAuth2ClientVO}
      */
-    SysUserVO newUsers(SysUserVO newUser);
+    SysOAuth2ClientVO newOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO);
 
-
-    /**
-     * 删除用户
-     *
-     * @param sysUserIdList 系统用户id集合
-     * @return {@link Boolean}
-     */
-    Boolean deleteUsers(List<Long> sysUserIdList);
-
-
-    /**
-     * 修改用户
-     *
-     * @param newUser 新用户
-     * @return {@link SysUserVO}
-     */
-    SysUserVO modifyUser(SysUserVO newUser);
-
-
-    /**
-     * 查询用户分页
-     *
-     * @param pageNo    当前页
-     * @param pageSize  页面大小
-     * @param sysUserVO 系统用户值对象
-     * @return {@link IPage}<{@link SysUserVO}>
-     */
-    IPage<SysUserVO> queryUsersByPagination(Integer pageNo, Integer pageSize, SysUserVO sysUserVO);
 }

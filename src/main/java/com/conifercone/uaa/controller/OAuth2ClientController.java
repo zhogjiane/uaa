@@ -22,18 +22,38 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.mapper;
+package com.conifercone.uaa.controller;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.conifercone.uaa.domain.entity.SysOAuth2Client;
-import org.apache.ibatis.annotations.Mapper;
+import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
+import com.conifercone.uaa.service.IOAuth2ClientService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
- * SaOAuth2 client数据库交互
+ * OAuth2客户端
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/17
+ * @date 2021/8/21
  */
-@Mapper
-public interface SaOAuth2Mapper extends BaseMapper<SysOAuth2Client> {
+@RestController
+@RequestMapping("/oauth2Client")
+@Api(value = "OAuth2客户端", tags = "OAuth2客户端")
+public class OAuth2ClientController {
+
+    @Resource
+    IOAuth2ClientService oauth2ClientService;
+
+
+    @PostMapping
+    @ApiOperation(value = "新增OAuth2客户端", tags = "OAuth2客户端")
+    public SysOAuth2ClientVO newOAuth2Client(@RequestBody @Valid SysOAuth2ClientVO sysOAuth2ClientVO) {
+        return oauth2ClientService.newOAuth2Client(sysOAuth2ClientVO);
+    }
 }

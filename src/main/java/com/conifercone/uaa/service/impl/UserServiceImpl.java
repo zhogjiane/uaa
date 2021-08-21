@@ -66,7 +66,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Resource
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "user:")
+    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "User:")
     private Cache<Long, SysUserVO> userCache;
 
     @Resource
@@ -103,6 +103,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
      * @return {@link Boolean}
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteUsers(List<Long> sysUserIdList) {
         boolean remove = this.removeByIds(sysUserIdList);
         CacheResult cacheResult = userCache.REMOVE_ALL(new HashSet<>(sysUserIdList));
@@ -116,6 +117,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
      * @return {@link SysUserVO}
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public SysUserVO modifyUser(SysUserVO newUser) {
         this.updateById(BeanUtil.copyProperties(newUser, SysUser.class));
         SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(newUser.getId()), SysUserVO.class);
