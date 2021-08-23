@@ -27,7 +27,6 @@ package com.conifercone.uaa.service.impl;
 import cn.dev33.satoken.oauth2.logic.SaOAuth2Template;
 import cn.dev33.satoken.oauth2.model.SaClientModel;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
@@ -56,9 +55,7 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
      */
     @Override
     public SaClientModel getClientModel(String clientId) {
-        LambdaQueryWrapper<SysOAuth2Client> sysOauth2ClientQueryWrapper = new LambdaQueryWrapper<>();
-        sysOauth2ClientQueryWrapper.eq(SysOAuth2Client::getClientId, clientId);
-        SysOAuth2Client sysOauth2Client = oauth2Mapper.selectOne(sysOauth2ClientQueryWrapper);
+        SysOAuth2Client sysOauth2Client = oauth2Mapper.queryClientInfoByClientId(clientId);
         if (ObjectUtil.isNotNull(sysOauth2Client)) {
             return new SaClientModel()
                     .setClientId(sysOauth2Client.getClientId())

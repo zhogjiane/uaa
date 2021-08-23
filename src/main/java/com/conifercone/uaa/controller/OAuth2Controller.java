@@ -26,6 +26,7 @@ package com.conifercone.uaa.controller;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.oauth2.logic.SaOAuth2Handle;
+import cn.dev33.satoken.util.SaResult;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,11 @@ public class OAuth2Controller {
     @RequestMapping("/*")
     public Object request() {
         log.info("------- 进入请求: " + SaHolder.getRequest().getUrl());
-        return SaOAuth2Handle.serverRequest();
+        //格式化返回格式
+        Object result = SaOAuth2Handle.serverRequest();
+        if (result instanceof SaResult) {
+            return ((SaResult) result).getData();
+        }
+        return result;
     }
 }

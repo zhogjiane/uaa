@@ -24,9 +24,11 @@
 
 package com.conifercone.uaa.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * SaOAuth2 client数据库交互
@@ -36,4 +38,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OAuth2Mapper extends BaseMapper<SysOAuth2Client> {
+
+    /**
+     * 根据客户端id查询客户端信息
+     *
+     * @param clientId 客户端id
+     * @return {@link SysOAuth2Client}
+     */
+    @InterceptorIgnore(tenantLine = "true")
+    SysOAuth2Client queryClientInfoByClientId(@Param("clientId") String clientId);
 }
