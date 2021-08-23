@@ -24,9 +24,11 @@
 
 package com.conifercone.uaa.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.conifercone.uaa.domain.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户mapper
@@ -36,4 +38,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<SysUser> {
+
+    /**
+     * 基于账户名称查询用户
+     *
+     * @param accountName 账户名称
+     * @return {@link SysUser}
+     */
+    @InterceptorIgnore(tenantLine = "true")
+    SysUser queryUsersBasedOnAccountName(@Param("accountName") String accountName);
 }

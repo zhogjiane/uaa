@@ -25,4 +25,25 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.conifercone.uaa.mapper.UserMapper">
+    <select id="queryUsersBasedOnAccountName" resultType="com.conifercone.uaa.domain.entity.SysUser">
+        select id,
+               account_name,
+               password,
+               real_name,
+               sex,
+               phone_number,
+               email,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               removed,
+               tenant_id
+        from sys_user
+        <where>
+            <if test="accountName != null and accountName != ''">
+                account_name = #{accountName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
 </mapper>

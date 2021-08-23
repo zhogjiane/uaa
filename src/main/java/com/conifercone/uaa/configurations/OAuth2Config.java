@@ -28,12 +28,11 @@ import cn.dev33.satoken.oauth2.config.SaOAuth2Config;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.conifercone.uaa.domain.constant.UserSessionDataNameConstant;
 import com.conifercone.uaa.domain.entity.SysUser;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
-import com.conifercone.uaa.service.IUserService;
+import com.conifercone.uaa.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +51,7 @@ import javax.annotation.Resource;
 public class OAuth2Config {
 
     @Resource
-    IUserService userService;
+    UserMapper userMapper;
 
     @Resource
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -63,9 +62,7 @@ public class OAuth2Config {
     public void setSaOAuth2Config(SaOAuth2Config cfg) {
         //设置登录验证逻辑
         cfg.setDoLoginHandle((name, pwd) -> {
-            LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            sysUserLambdaQueryWrapper.eq(SysUser::getAccountName, name);
-            SysUser sysUser = userService.getOne(sysUserLambdaQueryWrapper);
+            SysUser sysUser = userMapper.queryUsersBasedOnAccountName(name);
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new BizException(ResultCode.USER_NOT_EXIST);
             }
@@ -74,7 +71,8 @@ public class OAuth2Config {
                 //自定义用户session数据
                 SaSession sessionByLoginId = StpUtil.getSessionByLoginId(sysUser.getId());
                 sessionByLoginId.set(UserSessionDataNameConstant.TENANT_ID, sysUser.getTenantId());
-                return name;
+                sysUser.setPassword("");
+                return sysUser;
             }
             throw new BizException(ResultCode.USER_LOGIN_FAIL);
         });
