@@ -41,7 +41,7 @@ public class DataPermissionsUtil {
     /**
      * 获取登录用户数据权限
      *
-     * @return {@link String}
+     * @return {@link Integer}
      */
     public static Integer getLoginUserDataPermissions() {
         return Integer.parseInt(String.valueOf(StpUtil.getSession().get(UserSessionDataNameConstant.DATA_PERMISSIONS)));

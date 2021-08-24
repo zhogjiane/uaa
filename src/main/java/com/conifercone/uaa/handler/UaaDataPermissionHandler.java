@@ -44,6 +44,13 @@ import net.sf.jsqlparser.schema.Column;
 @Slf4j
 public class UaaDataPermissionHandler implements DataPermissionHandler {
 
+    /**
+     * 获得sql
+     *
+     * @param where             where条件
+     * @param mappedStatementId 映射语句id
+     * @return {@link Expression}
+     */
     @Override
     public Expression getSqlSegment(Expression where, String mappedStatementId) {
         Integer loginUserDataPermissions = DataPermissionsUtil.getLoginUserDataPermissions();

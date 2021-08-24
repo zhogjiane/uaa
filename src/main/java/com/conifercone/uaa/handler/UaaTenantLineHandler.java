@@ -41,11 +41,22 @@ import java.util.Arrays;
 public class UaaTenantLineHandler implements TenantLineHandler {
 
 
+    /**
+     * 获取租户id
+     *
+     * @return {@link Expression}
+     */
     @Override
     public Expression getTenantId() {
         return new LongValue(TenantUtil.getLoginUserTenantId());
     }
 
+    /**
+     * 忽略表
+     *
+     * @param tableName 表名
+     * @return boolean
+     */
     @Override
     public boolean ignoreTable(String tableName) {
         return Arrays.stream(TenantConstant.IGNORE_TENANT_TABLES).anyMatch(e -> e.equalsIgnoreCase(tableName));

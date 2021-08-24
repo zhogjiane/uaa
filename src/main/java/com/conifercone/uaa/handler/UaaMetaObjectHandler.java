@@ -39,6 +39,11 @@ import java.time.LocalDateTime;
  */
 public class UaaMetaObjectHandler implements MetaObjectHandler {
 
+    /**
+     * 插入填充
+     *
+     * @param metaObject 元对象
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
@@ -48,6 +53,11 @@ public class UaaMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "tenantId", Long.class, TenantUtil.getLoginUserTenantId());
     }
 
+    /**
+     * 更新填充
+     *
+     * @param metaObject 元对象
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());

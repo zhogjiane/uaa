@@ -22,28 +22,10 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.util;
-
-import cn.dev33.satoken.stp.StpUtil;
-import com.conifercone.uaa.domain.constant.UserSessionDataNameConstant;
-
 /**
- * 租户工具类
+ * 常量类
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/21
+ * @date 2021/8/24
  */
-public class TenantUtil {
-
-    private TenantUtil() {
-    }
-
-    /**
-     * 获取登录用户租户id
-     *
-     * @return {@link Long}
-     */
-    public static Long getLoginUserTenantId() {
-        return Long.parseLong(String.valueOf(StpUtil.getSession().get(UserSessionDataNameConstant.TENANT_ID)));
-    }
-}
+package com.conifercone.uaa.domain.constant;
