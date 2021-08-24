@@ -22,29 +22,28 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.interceptor;
+package com.conifercone.uaa.util;
 
-import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
-
-import java.sql.SQLException;
+import cn.dev33.satoken.stp.StpUtil;
+import com.conifercone.uaa.domain.constant.UserSessionDataNameConstant;
 
 /**
- * 数据权限拦截器
+ * 数据权限工具类
  *
  * @author sky5486560@gmail.com
  * @date 2021/8/21
  */
-public class DataScopeInterceptor implements InnerInterceptor {
+public class DataPermissionsUtil {
 
+    private DataPermissionsUtil() {
+    }
 
-    @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds,
-                            ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
-        InnerInterceptor.super.beforeQuery(executor, ms, parameter, rowBounds, resultHandler, boundSql);
+    /**
+     * 获取登录用户数据权限
+     *
+     * @return {@link String}
+     */
+    public static Integer getLoginUserDataPermissions() {
+        return Integer.parseInt(String.valueOf(StpUtil.getSession().get(UserSessionDataNameConstant.DATA_PERMISSIONS)));
     }
 }

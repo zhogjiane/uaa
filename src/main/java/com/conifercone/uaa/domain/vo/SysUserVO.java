@@ -25,6 +25,7 @@
 package com.conifercone.uaa.domain.vo;
 
 import com.baomidou.mybatisplus.core.injector.methods.Insert;
+import com.conifercone.uaa.domain.enumerate.DataPermissions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -82,4 +83,8 @@ public class SysUserVO extends BaseVO implements Serializable {
     @ApiModelProperty(value = "邮箱")
     @Email(message = "邮箱格式错误")
     private String email;
+
+    @ApiModelProperty(value = "数据权限范围")
+    @NotNull(message = "数据权限范围不能为空", groups = {Insert.class})
+    private DataPermissions dataPermissions;
 }

@@ -71,6 +71,7 @@ public class OAuth2Config {
                 //自定义用户session数据
                 SaSession sessionByLoginId = StpUtil.getSessionByLoginId(sysUser.getId());
                 sessionByLoginId.set(UserSessionDataNameConstant.TENANT_ID, sysUser.getTenantId());
+                sessionByLoginId.set(UserSessionDataNameConstant.DATA_PERMISSIONS, sysUser.getDataPermissions().getCode());
                 sysUser.setPassword("");
                 return sysUser;
             }

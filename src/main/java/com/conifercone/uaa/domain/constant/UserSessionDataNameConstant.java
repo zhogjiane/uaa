@@ -40,4 +40,9 @@ public class UserSessionDataNameConstant {
      */
     public static final String TENANT_ID = "tenantId";
 
+    /**
+     * 数据权限范围
+     */
+    public static final String DATA_PERMISSIONS = "dataPermissions";
+
 }

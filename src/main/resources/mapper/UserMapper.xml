@@ -38,7 +38,8 @@
                update_by,
                update_time,
                removed,
-               tenant_id
+               tenant_id,
+               data_permissions
         from sys_user
         <where>
             <if test="accountName != null and accountName != ''">

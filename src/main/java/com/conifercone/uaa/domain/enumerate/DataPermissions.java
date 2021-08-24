@@ -22,47 +22,41 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.entity;
+package com.conifercone.uaa.domain.enumerate;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.conifercone.uaa.domain.enumerate.DataPermissions;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
 /**
- * 系统用户表
+ * 数据权限范围
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/24
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@TableName(value = "sys_user")
-@ApiModel(value = "系统用户表")
-public class SysUser extends BaseEntity {
+@Getter
+public enum DataPermissions {
 
-    @ApiModelProperty(value = "账户名称")
-    private String accountName;
+    ALL(1, "全部"),
+    DEPT(2, "本人所在组织机构"),
+    SELF(3, "本人"),
+    DEPT_SETS(4, "自定义组织机构"),
+    DIY(5, "自定义sql过滤");
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    DataPermissions(int code, String description) {
+        this.code = code;
+        this.description = description;
+    }
 
-    @ApiModelProperty(value = "真实姓名")
-    private String realName;
+    /**
+     * 数据权限范围代码
+     */
+    @EnumValue
+    private final int code;
 
-    @ApiModelProperty(value = "性别")
-    private String sex;
-
-    @ApiModelProperty(value = "手机号")
-    private String phoneNumber;
-
-    @ApiModelProperty(value = "邮箱")
-    private String email;
-
-    @ApiModelProperty(value = "数据权限范围")
-    private DataPermissions dataPermissions;
+    /**
+     * 数据权限范围描述
+     */
+    @JsonValue
+    private final String description;
 }

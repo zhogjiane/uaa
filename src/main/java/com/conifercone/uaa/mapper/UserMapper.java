@@ -45,6 +45,6 @@ public interface UserMapper extends BaseMapper<SysUser> {
      * @param accountName 账户名称
      * @return {@link SysUser}
      */
-    @InterceptorIgnore(tenantLine = "true")
+    @InterceptorIgnore(tenantLine = "true", dataPermission = "true")
     SysUser queryUsersBasedOnAccountName(@Param("accountName") String accountName);
 }

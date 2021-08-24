@@ -45,6 +45,6 @@ public interface OAuth2ClientMapper extends BaseMapper<SysOAuth2Client> {
      * @param clientId 客户端id
      * @return {@link SysOAuth2Client}
      */
-    @InterceptorIgnore(tenantLine = "true")
+    @InterceptorIgnore(tenantLine = "true", dataPermission = "true")
     SysOAuth2Client queryClientInfoByClientId(@Param("clientId") String clientId);
 }
