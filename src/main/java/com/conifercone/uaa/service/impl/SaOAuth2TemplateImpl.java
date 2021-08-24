@@ -30,7 +30,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
-import com.conifercone.uaa.mapper.OAuth2Mapper;
+import com.conifercone.uaa.mapper.OAuth2ClientMapper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -45,7 +45,7 @@ import javax.annotation.Resource;
 public class SaOAuth2TemplateImpl extends SaOAuth2Template {
 
     @Resource
-    OAuth2Mapper oauth2Mapper;
+    OAuth2ClientMapper oauth2ClientMapper;
 
     /**
      * 根据 id 获取 Client 信息
@@ -55,7 +55,7 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
      */
     @Override
     public SaClientModel getClientModel(String clientId) {
-        SysOAuth2Client sysOauth2Client = oauth2Mapper.queryClientInfoByClientId(clientId);
+        SysOAuth2Client sysOauth2Client = oauth2ClientMapper.queryClientInfoByClientId(clientId);
         if (ObjectUtil.isNotNull(sysOauth2Client)) {
             return new SaClientModel()
                     .setClientId(sysOauth2Client.getClientId())

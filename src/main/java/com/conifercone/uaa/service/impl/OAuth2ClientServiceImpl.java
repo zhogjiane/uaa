@@ -37,7 +37,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
-import com.conifercone.uaa.mapper.OAuth2Mapper;
+import com.conifercone.uaa.mapper.OAuth2ClientMapper;
 import com.conifercone.uaa.service.IOAuth2ClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * @date 2021/8/21
  */
 @Service
-public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2Mapper, SysOAuth2Client> implements IOAuth2ClientService {
+public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, SysOAuth2Client> implements IOAuth2ClientService {
 
     @Resource
     Snowflake snowflake;

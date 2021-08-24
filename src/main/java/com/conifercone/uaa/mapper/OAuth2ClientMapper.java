@@ -37,7 +37,7 @@ import org.apache.ibatis.annotations.Param;
  * @date 2021/8/17
  */
 @Mapper
-public interface OAuth2Mapper extends BaseMapper<SysOAuth2Client> {
+public interface OAuth2ClientMapper extends BaseMapper<SysOAuth2Client> {
 
     /**
      * 根据客户端id查询客户端信息
