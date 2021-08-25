@@ -24,9 +24,12 @@
 
 package com.conifercone.uaa.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.vo.SysRoleVO;
+
+import java.util.List;
 
 /**
  * 角色service
@@ -43,4 +46,31 @@ public interface IRoleService extends IService<SysRole> {
      * @return {@link SysRoleVO}
      */
     SysRoleVO newRole(SysRoleVO sysRoleVO);
+
+    /**
+     * 删除角色
+     *
+     * @param roleIds 角色id列表
+     * @return {@link List}<{@link SysRoleVO}>
+     */
+    List<SysRoleVO> deleteRoles(List<Long> roleIds);
+
+    /**
+     * 修改角色
+     *
+     * @param sysRoleVO 系统角色值对象
+     * @return {@link SysRoleVO}
+     */
+    SysRoleVO modifyRole(SysRoleVO sysRoleVO);
+
+    /**
+     * 分页查询角色
+     *
+     * @param pageNo    当前页
+     * @param pageSize  页面大小
+     * @param sysRoleVO 系统角色值对象
+     * @return {@link IPage}<{@link SysRoleVO}>
+     */
+    IPage<SysRoleVO> pagingQueryRole(Integer pageNo, Integer pageSize, SysRoleVO sysRoleVO);
+
 }

@@ -126,11 +126,10 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
     public IPage<SysOAuth2ClientVO> pagingQueryOAuth2Client(Integer pageNo, Integer pageSize, SysOAuth2ClientVO sysOAuth2ClientVO) {
         LambdaQueryWrapper<SysOAuth2Client> sysOAuth2ClientLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysOAuth2ClientLambdaQueryWrapper
-                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getClientId()), SysOAuth2Client::getClientId, sysOAuth2ClientVO.getClientId());
-        sysOAuth2ClientLambdaQueryWrapper
-                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getAllowUrl()), SysOAuth2Client::getAllowUrl, sysOAuth2ClientVO.getAllowUrl());
-        sysOAuth2ClientLambdaQueryWrapper
-                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getContractScope()), SysOAuth2Client::getContractScope, sysOAuth2ClientVO.getContractScope());
+                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getClientId()), SysOAuth2Client::getClientId, sysOAuth2ClientVO.getClientId())
+                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getAllowUrl()), SysOAuth2Client::getAllowUrl, sysOAuth2ClientVO.getAllowUrl())
+                .like(CharSequenceUtil.isNotBlank(sysOAuth2ClientVO.getContractScope()), SysOAuth2Client::getContractScope, sysOAuth2ClientVO.getContractScope())
+                .orderByDesc(SysOAuth2Client::getUpdateTime);
         Page<SysOAuth2Client> page = this.page(new Page<>(pageNo, pageSize), sysOAuth2ClientLambdaQueryWrapper);
         IPage<SysOAuth2ClientVO> sysOAuth2ClientVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         List<SysOAuth2ClientVO> sysOAuth2ClientVOList = Optional.ofNullable(page.getRecords()).orElseGet(CollUtil::newLinkedList)

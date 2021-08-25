@@ -25,10 +25,15 @@
 package com.conifercone.uaa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.vo.SysRoleVO;
@@ -38,6 +43,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 角色service
@@ -72,4 +81,64 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
         return newSysRoleVO;
     }
 
+    /**
+     * 删除角色
+     *
+     * @param roleIds 角色id列表
+     * @return {@link List}<{@link SysRoleVO}>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysRoleVO> deleteRoles(List<Long> roleIds) {
+        this.removeByIds(roleIds);
+        rolesCache.REMOVE_ALL(new HashSet<>(roleIds));
+        return Optional.ofNullable(this.listByIds(roleIds))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysRole -> BeanUtil.copyProperties(sysRole, SysRoleVO.class))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 修改角色
+     *
+     * @param sysRoleVO 系统角色值对象
+     * @return {@link SysRoleVO}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysRoleVO modifyRole(SysRoleVO sysRoleVO) {
+        this.updateById(BeanUtil.copyProperties(sysRoleVO, SysRole.class));
+        Long id = sysRoleVO.getId();
+        SysRole sysRole = this.getById(id);
+        SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
+        rolesCache.PUT(id, newSysRoleVO);
+        return newSysRoleVO;
+    }
+
+    /**
+     * 分页查询角色
+     *
+     * @param pageNo    当前页
+     * @param pageSize  页面大小
+     * @param sysRoleVO 系统角色值对象
+     * @return {@link IPage}<{@link SysRoleVO}>
+     */
+    @Override
+    public IPage<SysRoleVO> pagingQueryRole(Integer pageNo, Integer pageSize, SysRoleVO sysRoleVO) {
+        LambdaQueryWrapper<SysRole> sysRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysRoleLambdaQueryWrapper
+                .like(CharSequenceUtil.isNotBlank(sysRoleVO.getRoleName()), SysRole::getRoleName, sysRoleVO.getRoleName())
+                .like(CharSequenceUtil.isNotBlank(sysRoleVO.getRoleCode()), SysRole::getRoleCode, sysRoleVO.getRoleCode())
+                .orderByDesc(SysRole::getUpdateTime);
+        Page<SysRole> sysRolePage = this.page(new Page<>(pageNo, pageSize), sysRoleLambdaQueryWrapper);
+        IPage<SysRoleVO> sysRoleVOPage = new Page<>(sysRolePage.getCurrent(), sysRolePage.getSize(), sysRolePage.getTotal());
+        List<SysRoleVO> sysRoleVOList = Optional.ofNullable(sysRolePage.getRecords())
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysRole -> BeanUtil.copyProperties(sysRole, SysRoleVO.class))
+                .collect(Collectors.toList());
+        sysRoleVOPage.setRecords(sysRoleVOList);
+        return sysRoleVOPage;
+    }
 }

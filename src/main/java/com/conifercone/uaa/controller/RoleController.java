@@ -24,18 +24,17 @@
 
 package com.conifercone.uaa.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.domain.vo.SysRoleVO;
 import com.conifercone.uaa.service.IRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 角色controller
@@ -56,5 +55,23 @@ public class RoleController {
     @ApiOperation("新增角色")
     public SysRoleVO newRole(@RequestBody @Valid SysRoleVO newRole) {
         return roleService.newRole(newRole);
+    }
+
+    @DeleteMapping
+    @ApiOperation("删除角色")
+    public List<SysRoleVO> deleteRoles(@RequestBody @Valid List<Long> roleIds) {
+        return roleService.deleteRoles(roleIds);
+    }
+
+    @PutMapping
+    @ApiOperation("修改角色")
+    public SysRoleVO modifyRole(@RequestBody @Valid SysRoleVO sysRoleVO) {
+        return roleService.modifyRole(sysRoleVO);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation("分页查询角色")
+    public IPage<SysRoleVO> pagingQueryRole(Integer pageNo, Integer pageSize, SysRoleVO sysRoleVO) {
+        return roleService.pagingQueryRole(pageNo, pageSize, sysRoleVO);
     }
 }
