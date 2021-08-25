@@ -40,9 +40,19 @@
         <result column="tenant_id" jdbcType="BIGINT" property="tenantId"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,client_id,client_secret,allow_url,contract_scope,create_by,create_time,update_by,update_time,
-        removed,tenant_id
+        id,
+        client_id,
+        client_secret,
+        allow_url,
+        contract_scope,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        removed,
+        tenant_id
     </sql>
+    <!--通过客户端 ID 查询客户端信息-->
     <select id="queryClientInfoByClientId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

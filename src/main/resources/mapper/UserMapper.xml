@@ -43,9 +43,22 @@
         <result column="data_permissions" jdbcType="INTEGER" property="dataPermissions"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,account_name,password,real_name,sex,phone_number,email,create_by,create_time,update_by,
-        update_time,removed,tenant_id,data_permissions
+        id,
+        account_name,
+        password,
+        real_name,
+        sex,
+        phone_number,
+        email,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        removed,
+        tenant_id,
+        data_permissions
     </sql>
+    <!--根据账户名查询用户-->
     <select id="queryUsersBasedOnAccountName" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
