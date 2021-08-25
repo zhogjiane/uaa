@@ -61,6 +61,7 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
     Snowflake snowflake;
 
     @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "OAuth2Client:")
+    @SuppressWarnings("unused")
     private Cache<Long, SysOAuth2ClientVO> oauth2ClientCache;
 
     /**

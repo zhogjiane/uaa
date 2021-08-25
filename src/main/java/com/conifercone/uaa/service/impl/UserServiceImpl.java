@@ -70,9 +70,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "User:")
+    @SuppressWarnings("unused")
     private Cache<Long, SysUserVO> userCache;
 
     @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "UserRole:")
+    @SuppressWarnings("unused")
     private Cache<Long, SysUserRoleVO> userRoleCache;
 
     @Resource

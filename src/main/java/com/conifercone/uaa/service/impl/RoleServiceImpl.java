@@ -61,6 +61,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     Snowflake snowflake;
 
     @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "Role:")
+    @SuppressWarnings("unused")
     private Cache<Long, SysRoleVO> rolesCache;
 
     /**
