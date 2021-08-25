@@ -34,11 +34,32 @@
  Target Server Version : 50732
  File Encoding         : 65001
 
- Date: 25/08/2021 11:18:29
+ Date: 25/08/2021 11:33:15
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for sys_function_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_function_permission`;
+CREATE TABLE `sys_function_permission`
+(
+    `id`              bigint(40)                                              NOT NULL COMMENT '主键id',
+    `permission_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限编码',
+    `permission_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限名称',
+    `create_by`       bigint(40)                                              NULL DEFAULT NULL COMMENT '创建人',
+    `create_time`     timestamp                                               NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`       bigint(40)                                              NULL DEFAULT NULL COMMENT '更新人',
+    `update_time`     timestamp                                               NULL DEFAULT NULL COMMENT '更新时间',
+    `removed`         tinyint(4)                                              NULL DEFAULT 0 COMMENT '是否删除',
+    `tenant_id`       bigint(40)                                              NULL DEFAULT NULL COMMENT '租户id',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8
+  COLLATE = utf8_general_ci
+  ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_oauth2_client
@@ -69,15 +90,15 @@ CREATE TABLE `sys_oauth2_client`
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`
 (
-    `id`          bigint(40)                                              NOT NULL,
-    `role_code`   varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-    `role_name`   varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-    `create_by`   bigint(40)                                              NULL DEFAULT NULL,
-    `create_time` timestamp                                               NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-    `update_by`   bigint(40)                                              NULL DEFAULT NULL,
-    `update_time` timestamp                                               NULL DEFAULT '0000-00-00 00:00:00',
-    `removed`     tinyint(4)                                              NULL DEFAULT 0,
-    `tenant_id`   bigint(40)                                              NULL DEFAULT NULL,
+    `id`          bigint(40)                                              NOT NULL COMMENT '主键id',
+    `role_code`   varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色编码',
+    `role_name`   varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名称',
+    `create_by`   bigint(40)                                              NULL DEFAULT NULL COMMENT '创建人',
+    `create_time` timestamp                                               NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`   bigint(40)                                              NULL DEFAULT NULL COMMENT '更新人',
+    `update_time` timestamp                                               NULL DEFAULT NULL COMMENT '更新时间',
+    `removed`     tinyint(4)                                              NULL DEFAULT 0 COMMENT '是否删除',
+    `tenant_id`   bigint(40)                                              NULL DEFAULT NULL COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   CHARACTER SET = utf8
@@ -98,7 +119,8 @@ CREATE TABLE `sys_tenant`
     `update_by`      bigint(40)                                              NULL DEFAULT NULL COMMENT '更新人',
     `update_time`    timestamp                                               NULL DEFAULT NULL COMMENT '更新时间',
     `removed`        tinyint(4)                                              NULL DEFAULT 0 COMMENT '是否删除',
-    `tenant_id`      bigint(40)                                              NULL DEFAULT NULL COMMENT '租户id'
+    `tenant_id`      bigint(40)                                              NULL DEFAULT NULL COMMENT '租户id',
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   CHARACTER SET = utf8
   COLLATE = utf8_general_ci COMMENT = '系统租户表'
@@ -136,15 +158,15 @@ CREATE TABLE `sys_user`
 DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE `sys_user_role`
 (
-    `id`          bigint(40) NOT NULL,
-    `role_id`     bigint(40) NULL DEFAULT NULL,
-    `user_id`     bigint(40) NULL DEFAULT NULL,
-    `create_by`   bigint(40) NULL DEFAULT NULL,
-    `create_time` timestamp  NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-    `update_by`   bigint(40) NULL DEFAULT NULL,
-    `update_time` timestamp  NULL DEFAULT '0000-00-00 00:00:00',
-    `removed`     tinyint(4) NULL DEFAULT 0,
-    `tenant_id`   bigint(40) NULL DEFAULT NULL,
+    `id`          bigint(40) NOT NULL COMMENT '主键id',
+    `role_id`     bigint(40) NULL DEFAULT NULL COMMENT '角色id',
+    `user_id`     bigint(40) NULL DEFAULT NULL COMMENT '用户id',
+    `create_by`   bigint(40) NULL DEFAULT NULL COMMENT '创建人',
+    `create_time` timestamp  NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`   bigint(40) NULL DEFAULT NULL COMMENT '更新人',
+    `update_time` timestamp  NULL DEFAULT NULL COMMENT '更新时间',
+    `removed`     tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
+    `tenant_id`   bigint(40) NULL DEFAULT NULL COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `FK_Reference_1` (`user_id`) USING BTREE,
     INDEX `FK_Reference_2` (`role_id`) USING BTREE,
