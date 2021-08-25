@@ -61,5 +61,6 @@ class FunctionPermissionServiceImplTest {
         IPage<SysFunctionPermissionVO> sysFunctionPermissionVOIPage = functionPermissionService
                 .pagingQueryFunctionPermissions(1, 10, new SysFunctionPermissionVO());
         Assertions.assertNotNull(sysFunctionPermissionVOIPage);
+        StpUtil.logoutByLoginId(0);
     }
 }
