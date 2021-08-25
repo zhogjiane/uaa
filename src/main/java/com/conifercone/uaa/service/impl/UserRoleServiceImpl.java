@@ -24,11 +24,17 @@
 
 package com.conifercone.uaa.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysUserRole;
 import com.conifercone.uaa.mapper.UserRoleMapper;
 import com.conifercone.uaa.service.IUserRoleService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 用户角色service实现
@@ -38,4 +44,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, SysUserRole> implements IUserRoleService {
+
+    /**
+     * 基于用户id查询用户角色关系
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link SysUserRole}>
+     */
+    @Override
+    public List<SysUserRole> queryUserRoleRelationshipBasedOnUserId(Long userId) {
+        LambdaQueryWrapper<SysUserRole> sysUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysUserRoleLambdaQueryWrapper.eq(ObjectUtil.isNotEmpty(userId), SysUserRole::getUserId, userId);
+        return Optional.ofNullable(this.list(sysUserRoleLambdaQueryWrapper))
+                .orElseGet(CollUtil::newLinkedList);
+    }
 }

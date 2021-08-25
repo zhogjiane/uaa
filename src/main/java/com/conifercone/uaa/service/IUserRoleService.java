@@ -27,6 +27,8 @@ package com.conifercone.uaa.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.conifercone.uaa.domain.entity.SysUserRole;
 
+import java.util.List;
+
 /**
  * 用户角色service
  *
@@ -34,4 +36,12 @@ import com.conifercone.uaa.domain.entity.SysUserRole;
  * @date 2021/8/25
  */
 public interface IUserRoleService extends IService<SysUserRole> {
+
+    /**
+     * 基于用户id查询用户角色关系
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link SysUserRole}>
+     */
+    List<SysUserRole> queryUserRoleRelationshipBasedOnUserId(Long userId);
 }
