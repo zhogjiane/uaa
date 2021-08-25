@@ -38,6 +38,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 用户值对象
@@ -87,4 +88,7 @@ public class SysUserVO extends BaseVO implements Serializable {
     @ApiModelProperty(value = "数据权限范围")
     @NotNull(message = "数据权限范围不能为空", groups = {Insert.class})
     private DataPermissions dataPermissions;
+
+    @ApiModelProperty(value = "用户角色id列表")
+    private List<Long> roleIds;
 }

@@ -36,8 +36,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysUser;
+import com.conifercone.uaa.domain.entity.SysUserRole;
+import com.conifercone.uaa.domain.vo.SysUserRoleVO;
 import com.conifercone.uaa.domain.vo.SysUserVO;
 import com.conifercone.uaa.mapper.UserMapper;
+import com.conifercone.uaa.service.IUserRoleService;
 import com.conifercone.uaa.service.IUserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -68,8 +72,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "User:")
     private Cache<Long, SysUserVO> userCache;
 
+    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "UserRole:")
+    private Cache<Long, SysUserRoleVO> userRoleCache;
+
     @Resource
     Snowflake snowflake;
+
+    @Resource
+    IUserRoleService userRoleService;
 
     /**
      * 新增用户
@@ -81,14 +91,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Transactional(rollbackFor = Exception.class)
     public SysUserVO newUsers(SysUserVO newUser) {
         //设置用户id
-        long id = snowflake.nextId();
-        newUser.setId(id);
+        final long userId = snowflake.nextId();
+        newUser.setId(userId);
         //密码加密
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        SysUser sysUser = BeanUtil.copyProperties(newUser, SysUser.class);
+        final SysUser sysUser = BeanUtil.copyProperties(newUser, SysUser.class);
         //保存用户信息
         this.save(sysUser);
-        SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(id), SysUserVO.class);
+        //保存用户角色信息
+        final List<Long> roleIds = newUser.getRoleIds();
+        if (CollUtil.isNotEmpty(roleIds)) {
+            final List<SysUserRole> sysUserRoleList = roleIds.stream().map(roleId -> {
+                final long userRoleId = snowflake.nextId();
+                final SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setId(userRoleId);
+                sysUserRole.setUserId(userId);
+                sysUserRole.setRoleId(roleId);
+                return sysUserRole;
+            }).collect(Collectors.toList());
+            userRoleService.saveBatch(sysUserRoleList);
+            final Map<Long, SysUserRoleVO> sysUserRoleVOMap = sysUserRoleList
+                    .stream()
+                    .map(sysUserRole -> BeanUtil.copyProperties(sysUserRole, SysUserRoleVO.class))
+                    .collect(Collectors.toList())
+                    .stream()
+                    .collect(Collectors.toMap(SysUserRoleVO::getId, sysUserRoleVO -> sysUserRoleVO));
+            userRoleCache.PUT_ALL(sysUserRoleVOMap);
+        }
+        final SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(userId), SysUserVO.class);
         //去除密码等敏感信息
         sysUserVO.setPassword("");
         userCache.PUT(sysUserVO.getId(), sysUserVO);
@@ -104,7 +134,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<SysUserVO> deleteUsers(List<Long> sysUserIdList) {
-        List<SysUser> sysUsers = this.listByIds(sysUserIdList);
+        final List<SysUser> sysUsers = this.listByIds(sysUserIdList);
         this.removeByIds(sysUserIdList);
         userCache.REMOVE_ALL(new HashSet<>(sysUserIdList));
         return Optional.ofNullable(sysUsers).orElseGet(CollUtil::newLinkedList)
@@ -123,7 +153,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Transactional(rollbackFor = Exception.class)
     public SysUserVO modifyUser(SysUserVO newUser) {
         this.updateById(BeanUtil.copyProperties(newUser, SysUser.class));
-        SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(newUser.getId()), SysUserVO.class);
+        final SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(newUser.getId()), SysUserVO.class);
         userCache.PUT(newUser.getId(), sysUserVO);
         return sysUserVO;
     }
@@ -146,9 +176,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
                 .like(CharSequenceUtil.isNotEmpty(sysUserVO.getEmail()), SysUser::getEmail, sysUserVO.getEmail())
                 .orderByDesc(SysUser::getUpdateTime);
         Page<SysUser> page = this.page(new Page<>(pageNo, pageSize), sysUserLambdaQueryWrapper);
-        List<SysUser> sysUserList = page.getRecords();
+        final List<SysUser> sysUserList = page.getRecords();
         IPage<SysUserVO> sysUserVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        List<SysUserVO> sysUserVOList = Optional.ofNullable(sysUserList).orElseGet(CollUtil::newLinkedList)
+        final List<SysUserVO> sysUserVOList = Optional.ofNullable(sysUserList).orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysUser -> BeanUtil.copyProperties(sysUser, SysUserVO.class))
                 .collect(Collectors.toList());

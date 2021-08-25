@@ -55,7 +55,7 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
      */
     @Override
     public SaClientModel getClientModel(String clientId) {
-        SysOAuth2Client sysOauth2Client = oauth2ClientMapper.queryClientInfoByClientId(clientId);
+        final SysOAuth2Client sysOauth2Client = oauth2ClientMapper.queryClientInfoByClientId(clientId);
         if (ObjectUtil.isNotNull(sysOauth2Client)) {
             return new SaClientModel()
                     .setClientId(sysOauth2Client.getClientId())

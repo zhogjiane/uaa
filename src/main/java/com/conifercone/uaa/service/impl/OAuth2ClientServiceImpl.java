@@ -72,10 +72,10 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysOAuth2ClientVO newOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO) {
-        long id = snowflake.nextId();
+        final long id = snowflake.nextId();
         sysOAuth2ClientVO.setId(id);
         this.save(BeanUtil.copyProperties(sysOAuth2ClientVO, SysOAuth2Client.class));
-        SysOAuth2ClientVO newSysOAuth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
+        final SysOAuth2ClientVO newSysOAuth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
         oauth2ClientCache.PUT(id, newSysOAuth2ClientVO);
         return newSysOAuth2ClientVO;
     }
@@ -89,7 +89,7 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<SysOAuth2ClientVO> deleteOAuth2Client(List<Long> oauth2ClientIdList) {
-        List<SysOAuth2Client> sysOAuth2Clients = this.listByIds(oauth2ClientIdList);
+        final List<SysOAuth2Client> sysOAuth2Clients = this.listByIds(oauth2ClientIdList);
         oauth2ClientCache.REMOVE_ALL(new HashSet<>(oauth2ClientIdList));
         this.removeByIds(oauth2ClientIdList);
         return Optional.ofNullable(sysOAuth2Clients).orElseGet(CollUtil::newLinkedList)
@@ -107,9 +107,9 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysOAuth2ClientVO modifyOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO) {
-        Long id = sysOAuth2ClientVO.getId();
+        final Long id = sysOAuth2ClientVO.getId();
         this.updateById(BeanUtil.copyProperties(sysOAuth2ClientVO, SysOAuth2Client.class));
-        SysOAuth2ClientVO oauth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
+        final SysOAuth2ClientVO oauth2ClientVO = BeanUtil.copyProperties(this.getById(id), SysOAuth2ClientVO.class);
         oauth2ClientCache.PUT(id, oauth2ClientVO);
         return oauth2ClientVO;
     }
@@ -132,7 +132,7 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
                 .orderByDesc(SysOAuth2Client::getUpdateTime);
         Page<SysOAuth2Client> page = this.page(new Page<>(pageNo, pageSize), sysOAuth2ClientLambdaQueryWrapper);
         IPage<SysOAuth2ClientVO> sysOAuth2ClientVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        List<SysOAuth2ClientVO> sysOAuth2ClientVOList = Optional.ofNullable(page.getRecords()).orElseGet(CollUtil::newLinkedList)
+        final List<SysOAuth2ClientVO> sysOAuth2ClientVOList = Optional.ofNullable(page.getRecords()).orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysOAuth2Client -> BeanUtil.copyProperties(sysOAuth2Client, SysOAuth2ClientVO.class))
                 .collect(Collectors.toList());

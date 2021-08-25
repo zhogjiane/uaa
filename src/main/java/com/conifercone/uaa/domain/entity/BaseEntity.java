@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -39,6 +40,7 @@ import java.time.LocalDateTime;
  */
 @ApiModel(value = "基础实体类")
 @Data
+@Accessors(chain = true)
 public class BaseEntity {
 
     @ApiModelProperty(value = "主键id")

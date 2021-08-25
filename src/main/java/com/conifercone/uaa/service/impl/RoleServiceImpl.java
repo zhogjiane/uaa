@@ -72,11 +72,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysRoleVO newRole(SysRoleVO sysRoleVO) {
-        long id = snowflake.nextId();
+        final long id = snowflake.nextId();
         sysRoleVO.setId(id);
         this.save(BeanUtil.copyProperties(sysRoleVO, SysRole.class));
-        SysRole sysRole = this.getById(id);
-        SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
+        final SysRole sysRole = this.getById(id);
+        final SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
         rolesCache.PUT(id, newSysRoleVO);
         return newSysRoleVO;
     }
@@ -109,9 +109,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     @Transactional(rollbackFor = Exception.class)
     public SysRoleVO modifyRole(SysRoleVO sysRoleVO) {
         this.updateById(BeanUtil.copyProperties(sysRoleVO, SysRole.class));
-        Long id = sysRoleVO.getId();
-        SysRole sysRole = this.getById(id);
-        SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
+        final Long id = sysRoleVO.getId();
+        final SysRole sysRole = this.getById(id);
+        final SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
         rolesCache.PUT(id, newSysRoleVO);
         return newSysRoleVO;
     }
@@ -133,7 +133,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
                 .orderByDesc(SysRole::getUpdateTime);
         Page<SysRole> sysRolePage = this.page(new Page<>(pageNo, pageSize), sysRoleLambdaQueryWrapper);
         IPage<SysRoleVO> sysRoleVOPage = new Page<>(sysRolePage.getCurrent(), sysRolePage.getSize(), sysRolePage.getTotal());
-        List<SysRoleVO> sysRoleVOList = Optional.ofNullable(sysRolePage.getRecords())
+        final List<SysRoleVO> sysRoleVOList = Optional.ofNullable(sysRolePage.getRecords())
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysRole -> BeanUtil.copyProperties(sysRole, SysRoleVO.class))
