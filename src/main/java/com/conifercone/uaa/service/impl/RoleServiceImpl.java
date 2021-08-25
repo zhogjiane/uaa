@@ -91,9 +91,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<SysRoleVO> deleteRoles(List<Long> roleIds) {
+        final List<SysRole> sysRoleList = this.listByIds(roleIds);
         this.removeByIds(roleIds);
         rolesCache.REMOVE_ALL(new HashSet<>(roleIds));
-        return Optional.ofNullable(this.listByIds(roleIds))
+        return Optional.ofNullable(sysRoleList)
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysRole -> BeanUtil.copyProperties(sysRole, SysRoleVO.class))
