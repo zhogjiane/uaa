@@ -37,7 +37,7 @@ dependencies {
     // mybatis
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     // mybatis plus
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.2'
     // druid数据库连接池
     implementation 'com.alibaba:druid-spring-boot-starter:1.2.6'
     // 配置中心
@@ -47,13 +47,13 @@ dependencies {
     // bootstrap文件读取支持
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     // saToken
-    implementation 'cn.dev33:sa-token-spring-boot-starter:1.24.0'
+    implementation 'cn.dev33:sa-token-spring-boot-starter:1.25.0'
     // hutool工具包
-    implementation 'cn.hutool:hutool-all:5.7.7'
+    implementation 'cn.hutool:hutool-all:5.7.9'
     // saToken redis分布式存储
-    implementation 'cn.dev33:sa-token-dao-redis-jackson:1.24.0'
+    implementation 'cn.dev33:sa-token-dao-redis-jackson:1.25.0'
     // saToken Oauth2
-    implementation 'cn.dev33:sa-token-oauth2:1.24.0'
+    implementation 'cn.dev33:sa-token-oauth2:1.25.0'
     // redis连接池
     implementation 'org.apache.commons:commons-pool2:2.10.0'
     // swagger支持
