@@ -58,4 +58,19 @@ public class SysRoleVO extends BaseVO implements Serializable {
     @NotBlank(message = "角色名称不能为空", groups = {Insert.class})
     @NotNull(message = "角色名称不能为空", groups = {Insert.class})
     private String roleName;
+
+    @Override
+    public String toString() {
+        return "SysRoleVO{" +
+                "id=" + id +
+                ", createBy=" + createBy +
+                ", createTime=" + createTime +
+                ", updateBy=" + updateBy +
+                ", updateTime=" + updateTime +
+                ", removed=" + removed +
+                ", tenantId=" + tenantId +
+                ", roleCode='" + roleCode + '\'' +
+                ", roleName='" + roleName + '\'' +
+                '}';
+    }
 }

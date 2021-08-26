@@ -72,5 +72,5 @@ public class FunctionPermissionController {
     public IPage<SysFunctionPermissionVO> pagingQueryFunctionPermissions(Integer pageNo, Integer pageSize, SysFunctionPermissionVO sysFunctionPermissionVO) {
         return functionPermissionService.pagingQueryFunctionPermissions(pageNo, pageSize, sysFunctionPermissionVO);
     }
-    
+
 }

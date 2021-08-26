@@ -24,18 +24,24 @@
 
 package com.conifercone.uaa.service.impl;
 
-import cn.dev33.satoken.session.SaSession;
-import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.UaaApplicationServer;
-import com.conifercone.uaa.domain.constant.UserSessionDataNameConstant;
 import com.conifercone.uaa.domain.vo.SysFunctionPermissionVO;
 import com.conifercone.uaa.service.IFunctionPermissionService;
+import com.conifercone.uaa.util.MockLogin;
+import org.jboss.logging.Logger;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 功能权限业务逻辑层单元测试
@@ -49,18 +55,80 @@ class FunctionPermissionServiceImplTest {
     @Resource
     IFunctionPermissionService functionPermissionService;
 
+    private static final Logger logger = Logger.getLogger(FunctionPermissionServiceImplTest.class);
+
+    @BeforeEach
+    void loginBeforeTesting() {
+        MockLogin.loginIn();
+    }
+
+    @AfterEach
+    void logOutAfterTesting() {
+        MockLogin.loginOut();
+    }
+
+    /**
+     * 新功能权限
+     */
+    @Test
+    @Transactional
+    @Rollback
+    void newFunctionPermission() {
+        SysFunctionPermissionVO sysFunctionPermissionVO = new SysFunctionPermissionVO();
+        sysFunctionPermissionVO.setPermissionCode("user-add");
+        sysFunctionPermissionVO.setPermissionName("用户新增");
+        SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
+        logger.info(">>>>>>>>>>>>>>>>>>" + newSysFunctionPermissionVO.toString());
+        Assertions.assertNotNull(newSysFunctionPermissionVO);
+    }
+
+    /**
+     * 删除功能权限
+     */
+    @Test
+    @Transactional
+    @Rollback
+    void deleteFunctionPermissions() {
+        SysFunctionPermissionVO sysFunctionPermissionVO = new SysFunctionPermissionVO();
+        sysFunctionPermissionVO.setPermissionCode("user-del");
+        sysFunctionPermissionVO.setPermissionName("用户删除");
+        SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
+        LinkedList<Long> idList = CollUtil.newLinkedList();
+        idList.add(newSysFunctionPermissionVO.getId());
+        List<SysFunctionPermissionVO> sysFunctionPermissionVOS = functionPermissionService.deleteFunctionPermissions(idList);
+        logger.info(">>>>>>>>>>>>>>>>>>" + sysFunctionPermissionVOS.toString());
+        Assertions.assertNotNull(newSysFunctionPermissionVO);
+        Assertions.assertEquals(1, sysFunctionPermissionVOS.size());
+    }
+
+    /**
+     * 修改功能权限
+     */
+    @Test
+    @Transactional
+    @Rollback
+    void modifyFunctionPermission() {
+        SysFunctionPermissionVO sysFunctionPermissionVO = new SysFunctionPermissionVO();
+        sysFunctionPermissionVO.setPermissionCode("user-modify");
+        sysFunctionPermissionVO.setPermissionName("用户修改");
+        SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
+        SysFunctionPermissionVO afterModification = new SysFunctionPermissionVO();
+        afterModification.setPermissionCode("user-modify");
+        afterModification.setPermissionName("用户修改后");
+        afterModification.setId(newSysFunctionPermissionVO.getId());
+        SysFunctionPermissionVO modifyFunctionPermission = functionPermissionService.modifyFunctionPermission(afterModification);
+        logger.info(">>>>>>>>>>>>>>>>>>" + modifyFunctionPermission.toString());
+        Assertions.assertNotNull(newSysFunctionPermissionVO);
+        Assertions.assertEquals("用户修改后", modifyFunctionPermission.getPermissionName());
+    }
+
     /**
      * 分页查询功能权限
      */
     @Test
     void pagingQueryFunctionPermissions() {
-        StpUtil.login(0);
-        SaSession session = StpUtil.getSession();
-        session.set(UserSessionDataNameConstant.TENANT_ID, 0);
-        session.set(UserSessionDataNameConstant.DATA_PERMISSIONS, 3);
         IPage<SysFunctionPermissionVO> sysFunctionPermissionVOIPage = functionPermissionService
                 .pagingQueryFunctionPermissions(1, 10, new SysFunctionPermissionVO());
         Assertions.assertNotNull(sysFunctionPermissionVOIPage);
-        StpUtil.logoutByLoginId(0);
     }
 }

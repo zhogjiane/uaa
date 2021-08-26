@@ -55,4 +55,19 @@ public class SysUserRoleVO extends BaseVO implements Serializable {
     @ApiModelProperty(value = "角色id")
     @NotNull(message = "角色id不能为空", groups = {Insert.class})
     private Long roleId;
+
+    @Override
+    public String toString() {
+        return "SysUserRoleVO{" +
+                "id=" + id +
+                ", createBy=" + createBy +
+                ", createTime=" + createTime +
+                ", updateBy=" + updateBy +
+                ", updateTime=" + updateTime +
+                ", removed=" + removed +
+                ", tenantId=" + tenantId +
+                ", userId=" + userId +
+                ", roleId=" + roleId +
+                '}';
+    }
 }

@@ -91,4 +91,25 @@ public class SysUserVO extends BaseVO implements Serializable {
 
     @ApiModelProperty(value = "用户角色id列表")
     private List<Long> roleIds;
+
+    @Override
+    public String toString() {
+        return "SysUserVO{" +
+                "id=" + id +
+                ", createBy=" + createBy +
+                ", createTime=" + createTime +
+                ", updateBy=" + updateBy +
+                ", updateTime=" + updateTime +
+                ", removed=" + removed +
+                ", tenantId=" + tenantId +
+                ", accountName='" + accountName + '\'' +
+                ", password='" + password + '\'' +
+                ", realName='" + realName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", dataPermissions=" + dataPermissions +
+                ", roleIds=" + roleIds +
+                '}';
+    }
 }

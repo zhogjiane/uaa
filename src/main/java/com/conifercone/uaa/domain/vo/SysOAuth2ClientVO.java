@@ -64,4 +64,21 @@ public class SysOAuth2ClientVO extends BaseVO implements Serializable {
 
     @ApiModelProperty(value = "契约范围")
     private String contractScope;
+
+    @Override
+    public String toString() {
+        return "SysOAuth2ClientVO{" +
+                "id=" + id +
+                ", createBy=" + createBy +
+                ", createTime=" + createTime +
+                ", updateBy=" + updateBy +
+                ", updateTime=" + updateTime +
+                ", removed=" + removed +
+                ", tenantId=" + tenantId +
+                ", clientId='" + clientId + '\'' +
+                ", clientSecret='" + clientSecret + '\'' +
+                ", allowUrl='" + allowUrl + '\'' +
+                ", contractScope='" + contractScope + '\'' +
+                '}';
+    }
 }

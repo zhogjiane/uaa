@@ -51,4 +51,19 @@ public class SysTenantVO extends BaseVO implements Serializable {
 
     @ApiModelProperty(value = "租户简介")
     private String tenantProfile;
+
+    @Override
+    public String toString() {
+        return "SysTenantVO{" +
+                "id=" + id +
+                ", createBy=" + createBy +
+                ", createTime=" + createTime +
+                ", updateBy=" + updateBy +
+                ", updateTime=" + updateTime +
+                ", removed=" + removed +
+                ", tenantId=" + tenantId +
+                ", tenantName='" + tenantName + '\'' +
+                ", tenantProfile='" + tenantProfile + '\'' +
+                '}';
+    }
 }
