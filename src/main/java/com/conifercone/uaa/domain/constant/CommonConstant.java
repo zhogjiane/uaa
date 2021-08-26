@@ -22,39 +22,26 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.exception;
-
-import com.conifercone.uaa.domain.enumerate.ResultCode;
-import lombok.Getter;
+package com.conifercone.uaa.domain.constant;
 
 /**
- * 通用业务异常
+ * 通用常量
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/13
+ * @date 2021/8/26
  */
-@Getter
-public class BizException extends RuntimeException {
+public class CommonConstant {
 
-    /**
-     * 异常码
-     */
-    private final int code;
-
-    /**
-     * 异常信息
-     */
-    private final String msg;
-
-    private final ResultCode resultCode;
-
-    public BizException() {
-        this(ResultCode.FAILED);
+    private CommonConstant() {
     }
 
-    public BizException(ResultCode failed) {
-        this.code = failed.getCode();
-        this.msg = failed.getMsg();
-        this.resultCode = failed;
-    }
+    /**
+     * 异常返回
+     */
+    public static final int ABNORMAL_RETURN = -1;
+
+    /**
+     * 正常返回
+     */
+    public static final int NORMAL_RETURN = 1;
 }

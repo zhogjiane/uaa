@@ -24,6 +24,7 @@
 
 package com.conifercone.uaa.domain.vo;
 
+import com.conifercone.uaa.domain.constant.CommonConstant;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,6 +40,9 @@ import lombok.Data;
 @ApiModel(value = "自定义统一响应体")
 public class ResultVO<T> {
 
+    @ApiModelProperty(value = "响应类型 1：正常 -1：异常")
+    private int type;
+
     @ApiModelProperty(value = "状态码，比如1000 代表响应成功")
     private int code;
 
@@ -53,6 +57,14 @@ public class ResultVO<T> {
     }
 
     public ResultVO(ResultCode resultCode, T data) {
+        this.type = CommonConstant.NORMAL_RETURN;
+        this.code = resultCode.getCode();
+        this.msg = resultCode.getMsg();
+        this.data = data;
+    }
+
+    public ResultVO(ResultCode resultCode, int type, T data) {
+        this.type = type;
         this.code = resultCode.getCode();
         this.msg = resultCode.getMsg();
         this.data = data;

@@ -24,7 +24,13 @@
 
 package com.conifercone.uaa.domain.enumerate;
 
-import lombok.Getter;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.EnumSet;
 
 /**
  * 响应码枚举
@@ -32,7 +38,6 @@ import lombok.Getter;
  * @author sky5486560@gmail.com
  * @date 2021/8/13
  */
-@Getter
 public enum ResultCode {
 
     //1000系列通用错误
@@ -40,6 +45,7 @@ public enum ResultCode {
     FAILED(1001, "接口错误"),
     VALIDATE_FAILED(1002, "参数校验失败"),
     ERROR(1003, "未知错误"),
+    DATA_DUPLICATION(1004, "数据重复"),
 
     //2000系列用户错误
     USER_NOT_EXIST(2000, "用户不存在"),
@@ -52,6 +58,33 @@ public enum ResultCode {
 
     private final int code;
     private final String msg;
+    private MessageSource messageSource;
+
+    private void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return messageSource.getMessage(String.valueOf(code), null, msg, LocaleContextHolder.getLocale());
+    }
+
+    //经过静态内部类的方式注入bean，并赋值到枚举中
+    @Component
+    public static class ReportTypeServiceInjector {
+
+        @Resource
+        private MessageSource messageSource;
+
+        @PostConstruct
+        public void postConstruct() {
+            for (ResultCode rt : EnumSet.allOf(ResultCode.class))
+                rt.setMessageSource(messageSource);
+        }
+    }
 
     ResultCode(int code, String msg) {
         this.code = code;

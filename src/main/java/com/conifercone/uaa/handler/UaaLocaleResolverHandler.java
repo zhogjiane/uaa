@@ -22,39 +22,39 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.exception;
+package com.conifercone.uaa.handler;
 
-import com.conifercone.uaa.domain.enumerate.ResultCode;
-import lombok.Getter;
+import cn.hutool.core.text.CharSequenceUtil;
+import org.springframework.web.servlet.LocaleResolver;
+
+import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 /**
- * 通用业务异常
+ * 自定义区域解析处理器
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/13
+ * @date 2021/8/26
  */
-@Getter
-public class BizException extends RuntimeException {
+public class UaaLocaleResolverHandler implements LocaleResolver {
 
-    /**
-     * 异常码
-     */
-    private final int code;
-
-    /**
-     * 异常信息
-     */
-    private final String msg;
-
-    private final ResultCode resultCode;
-
-    public BizException() {
-        this(ResultCode.FAILED);
+    @Override
+    @Nonnull
+    public Locale resolveLocale(@Nonnull HttpServletRequest request) {
+        //获取自定义请求头信息
+        String local = request.getHeader("Accept-Language");
+        //获取系统默认
+        Locale locale = Locale.getDefault();
+        if (CharSequenceUtil.isNotEmpty(local)) {
+            locale = new Locale(local);
+        }
+        return locale;
     }
 
-    public BizException(ResultCode failed) {
-        this.code = failed.getCode();
-        this.msg = failed.getMsg();
-        this.resultCode = failed;
+    @Override
+    public void setLocale(@Nonnull HttpServletRequest request, HttpServletResponse response, Locale locale) {
+        throw new UnsupportedOperationException();
     }
 }

@@ -22,39 +22,29 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.exception;
+package com.conifercone.uaa.configurations;
 
-import com.conifercone.uaa.domain.enumerate.ResultCode;
-import lombok.Getter;
+import com.conifercone.uaa.handler.UaaLocaleResolverHandler;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
 
 /**
- * 通用业务异常
+ * 项目通用配置文件
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/13
+ * @date 2021/8/26
  */
-@Getter
-public class BizException extends RuntimeException {
+@Configuration
+public class UaaConfig {
 
     /**
-     * 异常码
+     * 区域设置解析器
+     *
+     * @return {@link LocaleResolver}
      */
-    private final int code;
-
-    /**
-     * 异常信息
-     */
-    private final String msg;
-
-    private final ResultCode resultCode;
-
-    public BizException() {
-        this(ResultCode.FAILED);
-    }
-
-    public BizException(ResultCode failed) {
-        this.code = failed.getCode();
-        this.msg = failed.getMsg();
-        this.resultCode = failed;
+    @Bean
+    public LocaleResolver localeResolver() {
+        return new UaaLocaleResolverHandler();
     }
 }

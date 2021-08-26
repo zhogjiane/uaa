@@ -25,6 +25,7 @@
 package com.conifercone.uaa.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import com.conifercone.uaa.domain.constant.CommonConstant;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.ResultVO;
@@ -58,7 +59,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultVO<Object> bizExceptionHandler(BizException bizException) {
-        return new ResultVO<>(ResultCode.FAILED, bizException.getMsg());
+        return new ResultVO<>(bizException.getResultCode(), CommonConstant.ABNORMAL_RETURN, bizException.getMsg());
     }
 
     /**
@@ -79,7 +80,7 @@ public class GlobalExceptionHandler {
             }
         }
         // 然后提取错误提示信息进行返回
-        return new ResultVO<>(ResultCode.VALIDATE_FAILED, list);
+        return new ResultVO<>(ResultCode.VALIDATE_FAILED, CommonConstant.ABNORMAL_RETURN, list);
     }
 
     /**
@@ -91,6 +92,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultVO<Object> notLoginExceptionHandler() {
         log.error("用户未登录");
-        return new ResultVO<>(ResultCode.USER_NOT_LOGIN, null);
+        return new ResultVO<>(ResultCode.USER_NOT_LOGIN, CommonConstant.ABNORMAL_RETURN, null);
     }
 }

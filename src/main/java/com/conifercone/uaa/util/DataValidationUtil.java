@@ -22,39 +22,38 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.domain.exception;
+package com.conifercone.uaa.util;
 
-import com.conifercone.uaa.domain.enumerate.ResultCode;
-import lombok.Getter;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
- * 通用业务异常
+ * 数据校验工具包
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/13
+ * @date 2021/8/26
  */
-@Getter
-public class BizException extends RuntimeException {
+public class DataValidationUtil {
 
-    /**
-     * 异常码
-     */
-    private final int code;
-
-    /**
-     * 异常信息
-     */
-    private final String msg;
-
-    private final ResultCode resultCode;
-
-    public BizException() {
-        this(ResultCode.FAILED);
+    private DataValidationUtil() {
     }
 
-    public BizException(ResultCode failed) {
-        this.code = failed.getCode();
-        this.msg = failed.getMsg();
-        this.resultCode = failed;
+    /**
+     * 确定数据库字段值重复
+     *
+     * @param service 服务
+     * @return {@link Boolean}
+     */
+    public static <T> Boolean determineTheFieldValueDatabaseDuplication(IService<T> service, SFunction<T, ?> columnName, Object comparisonValue) {
+        LambdaQueryWrapper<T> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(ObjectUtil.isNotNull(comparisonValue), columnName, comparisonValue);
+        List<T> list = Optional.ofNullable(service.list(lambdaQueryWrapper)).orElseGet(CollUtil::newLinkedList);
+        return CollUtil.isNotEmpty(list);
     }
 }
