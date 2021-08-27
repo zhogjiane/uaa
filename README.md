@@ -94,8 +94,11 @@
   <a href="https://mvnrepository.com/artifact/org.projectlombok/lombok/1.18.20">
     <img alt="lombok Version" src="https://img.shields.io/badge/lombok-1.18.20-brightgreen">
   </a>
- <a href="https://github.com/alibaba/jetcache">
+  <a href="https://github.com/alibaba/jetcache">
     <img alt="jetcache Version" src="https://img.shields.io/badge/jetcache--starter--redis-2.6.0-brightgreen">
+  </a>
+  <a href="https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test/2.5.3">
+    <img alt="spring-boot-starter-test Version" src="https://img.shields.io/badge/spring--boot--starter--test-2.5.3-brightgreen">
   </a>
 </p>
 
