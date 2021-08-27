@@ -27,6 +27,7 @@ package com.conifercone.uaa.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.UaaApplicationServer;
+import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.SysFunctionPermissionVO;
 import com.conifercone.uaa.service.IFunctionPermissionService;
 import com.conifercone.uaa.util.MockLogin;
@@ -78,6 +79,10 @@ class FunctionPermissionServiceImplTest {
         sysFunctionPermissionVO.setPermissionCode("user-add");
         sysFunctionPermissionVO.setPermissionName("用户新增");
         SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
+        SysFunctionPermissionVO sysFunctionPermissionVO2 = new SysFunctionPermissionVO();
+        sysFunctionPermissionVO2.setPermissionCode("user-add");
+        sysFunctionPermissionVO2.setPermissionName("用户新增");
+        Assertions.assertThrows(BizException.class, () -> functionPermissionService.newFunctionPermission(sysFunctionPermissionVO));
         logger.info(">>>>>>>>>>>>>>>>>>" + newSysFunctionPermissionVO.toString());
         Assertions.assertNotNull(newSysFunctionPermissionVO);
     }

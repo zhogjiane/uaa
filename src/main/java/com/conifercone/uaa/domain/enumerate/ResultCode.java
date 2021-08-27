@@ -54,7 +54,11 @@ public enum ResultCode {
     NO_PERMISSION(2003, "权限不足,请联系管理员"),
 
     //3000系列客户端错误
-    CLIENT_NOT_EXIST(3000, "客户端不存在");
+    CLIENT_NOT_EXIST(3000, "客户端不存在"),
+
+    //4000系列功能权限异常
+    DUPLICATE_FUNCTION_PERMISSION_CODE(4000, "功能权限编码重复"),
+    DUPLICATE_FUNCTION_PERMISSION_NAME(4001, "功能权限名称重复");
 
     private final int code;
     private final String msg;

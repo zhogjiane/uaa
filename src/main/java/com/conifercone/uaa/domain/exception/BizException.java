@@ -46,6 +46,14 @@ public class BizException extends RuntimeException {
      */
     private final String msg;
 
+    /**
+     * 异常数据
+     */
+    private final String data;
+
+    /**
+     * 结果代码
+     */
     private final ResultCode resultCode;
 
     public BizException() {
@@ -56,5 +64,13 @@ public class BizException extends RuntimeException {
         this.code = failed.getCode();
         this.msg = failed.getMsg();
         this.resultCode = failed;
+        this.data = null;
+    }
+
+    public <T> BizException(ResultCode failed, T data) {
+        this.code = failed.getCode();
+        this.msg = failed.getMsg();
+        this.resultCode = failed;
+        this.data = String.valueOf(data);
     }
 }

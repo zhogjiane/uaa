@@ -36,9 +36,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysFunctionPermission;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.SysFunctionPermissionVO;
 import com.conifercone.uaa.mapper.FunctionPermissionMapper;
 import com.conifercone.uaa.service.IFunctionPermissionService;
+import com.conifercone.uaa.util.DataValidationUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +77,14 @@ public class FunctionPermissionServiceImpl extends ServiceImpl<FunctionPermissio
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysFunctionPermissionVO newFunctionPermission(SysFunctionPermissionVO newSysFunctionPermissionVO) {
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysFunctionPermission::getPermissionCode, newSysFunctionPermissionVO.getPermissionCode()))) {
+            throw new BizException(ResultCode.DUPLICATE_FUNCTION_PERMISSION_CODE,newSysFunctionPermissionVO.getPermissionCode());
+        }
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysFunctionPermission::getPermissionName, newSysFunctionPermissionVO.getPermissionName()))) {
+            throw new BizException(ResultCode.DUPLICATE_FUNCTION_PERMISSION_NAME,newSysFunctionPermissionVO.getPermissionName());
+        }
         final long id = snowflake.nextId();
         newSysFunctionPermissionVO.setId(id);
         this.save(BeanUtil.copyProperties(newSysFunctionPermissionVO, SysFunctionPermission.class));

@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultVO<Object> bizExceptionHandler(BizException bizException) {
-        return new ResultVO<>(bizException.getResultCode(), CommonConstant.ABNORMAL_RETURN, bizException.getMsg());
+        return new ResultVO<>(bizException.getResultCode(), CommonConstant.ABNORMAL_RETURN, bizException.getData());
     }
 
     /**
