@@ -9,7 +9,7 @@ plugins {
 }
 
 
-group = 'org.conifercone'
+group = 'com.conifercone'
 description = 'uaa'
 sourceCompatibility = '1.8'
 version = "${PROJECT_VERSION}"
