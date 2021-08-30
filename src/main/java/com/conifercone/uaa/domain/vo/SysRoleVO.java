@@ -34,6 +34,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统角色值对象
@@ -59,6 +60,9 @@ public class SysRoleVO extends BaseVO implements Serializable {
     @NotNull(message = "角色名称不能为空", groups = {Insert.class})
     private String roleName;
 
+    @ApiModelProperty(value = "功能权限ID列表")
+    private List<Long> functionPermissionIdList;
+
     @Override
     public String toString() {
         return "SysRoleVO{" +
@@ -71,6 +75,7 @@ public class SysRoleVO extends BaseVO implements Serializable {
                 ", tenantId=" + tenantId +
                 ", roleCode='" + roleCode + '\'' +
                 ", roleName='" + roleName + '\'' +
+                ", functionPermissionIdList='" + functionPermissionIdList.toString() + '\'' +
                 '}';
     }
 }

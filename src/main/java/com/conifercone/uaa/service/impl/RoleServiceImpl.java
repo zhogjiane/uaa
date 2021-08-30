@@ -38,17 +38,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
+import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
 import com.conifercone.uaa.domain.vo.SysRoleVO;
 import com.conifercone.uaa.mapper.RoleMapper;
+import com.conifercone.uaa.service.IRoleFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleService;
 import com.conifercone.uaa.util.DataValidationUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,6 +66,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "Role:")
     @SuppressWarnings("unused")
     private Cache<Long, SysRoleVO> rolesCache;
+
+    @Resource
+    IRoleFunctionPermissionService roleFunctionPermissionService;
 
     /**
      * 新增角色
@@ -87,6 +90,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
         final long id = snowflake.nextId();
         sysRoleVO.setId(id);
         this.save(BeanUtil.copyProperties(sysRoleVO, SysRole.class));
+        roleFunctionPermissionService.specifyTheRoleToSetFunctionPermissions(sysRoleVO.getId(), sysRoleVO.getFunctionPermissionIdList());
         final SysRole sysRole = this.getById(id);
         final SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
         rolesCache.PUT(id, newSysRoleVO);
@@ -104,6 +108,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     public List<SysRoleVO> deleteRoles(List<Long> roleIds) {
         final List<SysRole> sysRoleList = this.listByIds(roleIds);
         this.removeByIds(roleIds);
+        roleFunctionPermissionService.deleteAllFunctionalPermissionsOfTheRole(roleIds);
         rolesCache.REMOVE_ALL(new HashSet<>(roleIds));
         return Optional.ofNullable(sysRoleList)
                 .orElseGet(CollUtil::newLinkedList)
@@ -122,6 +127,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     @Transactional(rollbackFor = Exception.class)
     public SysRoleVO modifyRole(SysRoleVO sysRoleVO) {
         this.updateById(BeanUtil.copyProperties(sysRoleVO, SysRole.class));
+        //删除角色功能权限
+        LinkedList<Long> roleIdList = CollUtil.newLinkedList();
+        roleIdList.add(sysRoleVO.getId());
+        roleFunctionPermissionService.deleteAllFunctionalPermissionsOfTheRole(roleIdList);
+        //重新设置角色功能权限
+        roleFunctionPermissionService.specifyTheRoleToSetFunctionPermissions(sysRoleVO.getId(), sysRoleVO.getFunctionPermissionIdList());
         final Long id = sysRoleVO.getId();
         final SysRole sysRole = this.getById(id);
         final SysRoleVO newSysRoleVO = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
@@ -146,10 +157,21 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
                 .orderByDesc(SysRole::getUpdateTime);
         Page<SysRole> sysRolePage = this.page(new Page<>(pageNo, pageSize), sysRoleLambdaQueryWrapper);
         IPage<SysRoleVO> sysRoleVOPage = new Page<>(sysRolePage.getCurrent(), sysRolePage.getSize(), sysRolePage.getTotal());
-        final List<SysRoleVO> sysRoleVOList = Optional.ofNullable(sysRolePage.getRecords())
+        final List<SysRole> sysRolePageRecords = sysRolePage.getRecords();
+        final List<Long> roleIdList = sysRolePageRecords.stream().map(SysRole::getId).collect(Collectors.toList());
+        final Map<Long, List<SysRoleFunctionPermissionVO>> roleListQueryRoleFunctionPermissions =
+                roleFunctionPermissionService.roleListQueryRoleFunctionPermissions(roleIdList);
+        final List<SysRoleVO> sysRoleVOList = Optional.of(sysRolePageRecords)
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysRole -> BeanUtil.copyProperties(sysRole, SysRoleVO.class))
+                .map(newSysRoleVO ->
+                        newSysRoleVO.setFunctionPermissionIdList(
+                                roleListQueryRoleFunctionPermissions
+                                        .get(newSysRoleVO.getId())
+                                        .stream()
+                                        .map(SysRoleFunctionPermissionVO::getPermissionId)
+                                        .collect(Collectors.toList())))
                 .collect(Collectors.toList());
         sysRoleVOPage.setRecords(sysRoleVOList);
         return sysRoleVOPage;

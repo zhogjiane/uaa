@@ -22,52 +22,39 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.service;
+package com.conifercone.uaa.domain.enumerate;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.conifercone.uaa.domain.entity.SysUserRole;
-import com.conifercone.uaa.domain.vo.SysUserRoleVO;
-
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
 /**
- * 用户角色service
+ * 用户性别枚举
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/25
+ * @date 2021/8/30
  */
-public interface IUserRoleService extends IService<SysUserRole> {
+@Getter
+public enum UserSex {
 
-    /**
-     * 基于用户id查询用户角色关系
-     *
-     * @param userId 用户id
-     * @return {@link List}<{@link SysUserRole}>
-     */
-    List<SysUserRoleVO> queryUserRoleRelationshipBasedOnUserId(Long userId);
-
-    /**
-     * 基于用户id列表查询用户角色关系
-     *
-     * @param userIdList 用户id列表
-     * @return {@link Map}<{@link Long}, {@link List}<{@link SysUserRoleVO}>>
-     */
-    Map<Long, List<SysUserRoleVO>> queryUserRoleRelationshipBasedOnUserId(List<Long> userIdList);
-
-    /**
-     * 指定用户设置角色
-     *
-     * @param userId  用户id
-     * @param roleIds 角色id
-     */
-    void specifyUserSettingsRole(Long userId, List<Long> roleIds);
+    WOMAN(0, "女"),
+    MAN(1, "男");
 
 
     /**
-     * 删除用户所有的角色
-     *
-     * @param userIdList 用户id集合
+     * 编码
      */
-    void deleteAllRolesOfTheUser(List<Long> userIdList);
+    @EnumValue
+    private final int code;
+
+    /**
+     * 信息
+     */
+    @JsonValue
+    private final String msg;
+
+    UserSex(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
 }

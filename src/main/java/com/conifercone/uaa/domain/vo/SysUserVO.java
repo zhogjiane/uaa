@@ -26,6 +26,7 @@ package com.conifercone.uaa.domain.vo;
 
 import com.baomidou.mybatisplus.core.injector.methods.Insert;
 import com.conifercone.uaa.domain.enumerate.DataPermissions;
+import com.conifercone.uaa.domain.enumerate.UserSex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -70,9 +71,8 @@ public class SysUserVO extends BaseVO implements Serializable {
     private String realName;
 
     @ApiModelProperty(value = "性别")
-    @NotBlank(message = "性别不能为空", groups = {Insert.class})
-    @NotNull(message = "性别不能为空", groups = {Insert.class})
-    private String sex;
+    @NotNull(message = "性别不能为空")
+    private UserSex sex;
 
     @ApiModelProperty(value = "手机号")
     @NotBlank(message = "手机号码不能为空", groups = {Insert.class})
@@ -105,10 +105,10 @@ public class SysUserVO extends BaseVO implements Serializable {
                 ", accountName='" + accountName + '\'' +
                 ", password='" + password + '\'' +
                 ", realName='" + realName + '\'' +
-                ", sex='" + sex + '\'' +
+                ", sex='" + sex.getMsg() + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", dataPermissions=" + dataPermissions +
+                ", dataPermissions=" + dataPermissions.getMsg() +
                 ", roleIds=" + roleIds +
                 '}';
     }

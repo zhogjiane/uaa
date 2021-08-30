@@ -26,12 +26,10 @@ package com.conifercone.uaa.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.conifercone.uaa.domain.entity.SysFunctionPermission;
 import com.conifercone.uaa.domain.entity.SysRole;
-import com.conifercone.uaa.domain.entity.SysRoleFunctionPermission;
-import com.conifercone.uaa.domain.entity.SysUserRole;
+import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
+import com.conifercone.uaa.domain.vo.SysUserRoleVO;
 import com.conifercone.uaa.service.IFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleService;
@@ -73,23 +71,16 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        LambdaQueryWrapper<SysUserRole> sysUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysUserRoleLambdaQueryWrapper.eq(ObjectUtil.isNotNull(loginId), SysUserRole::getUserId, loginId);
         //查询当前用户所拥有的角色
-        List<Long> roleIdList = Optional.ofNullable(userRoleService.list(sysUserRoleLambdaQueryWrapper))
+        List<Long> roleIdList = Optional.ofNullable(userRoleService.queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(loginId))))
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
-                .map(SysUserRole::getRoleId)
+                .map(SysUserRoleVO::getRoleId)
                 .collect(Collectors.toList());
         //查询角色对应的权限
-        LambdaQueryWrapper<SysRoleFunctionPermission> sysRoleFunctionPermissionLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysRoleFunctionPermissionLambdaQueryWrapper
-                .in(CollUtil.isNotEmpty(roleIdList), SysRoleFunctionPermission::getRoleId, roleIdList);
-        List<Long> permissionIdList = Optional.ofNullable(roleFunctionPermissionService.list(sysRoleFunctionPermissionLambdaQueryWrapper))
-                .orElseGet(CollUtil::newLinkedList)
+        List<Long> permissionIdList = roleFunctionPermissionService.summaryRoleFunctionPermissions(roleIdList)
                 .stream()
-                .map(SysRoleFunctionPermission::getPermissionId)
-                .distinct()
+                .map(SysRoleFunctionPermissionVO::getPermissionId)
                 .collect(Collectors.toList());
         return Optional.ofNullable(functionPermissionService.listByIds(permissionIdList))
                 .orElseGet(CollUtil::newLinkedList)
@@ -110,7 +101,7 @@ public class StpInterfaceImpl implements StpInterface {
         List<Long> roleIdList = userRoleService
                 .queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(loginId)))
                 .stream()
-                .map(SysUserRole::getRoleId)
+                .map(SysUserRoleVO::getRoleId)
                 .collect(Collectors.toList());
         return Optional.ofNullable(roleService.listByIds(roleIdList))
                 .orElseGet(CollUtil::newLinkedList)

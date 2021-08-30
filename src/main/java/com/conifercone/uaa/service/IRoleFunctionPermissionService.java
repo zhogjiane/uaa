@@ -26,6 +26,10 @@ package com.conifercone.uaa.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.conifercone.uaa.domain.entity.SysRoleFunctionPermission;
+import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 角色功能权限service
@@ -34,4 +38,35 @@ import com.conifercone.uaa.domain.entity.SysRoleFunctionPermission;
  * @date 2021/8/30
  */
 public interface IRoleFunctionPermissionService extends IService<SysRoleFunctionPermission> {
+
+    /**
+     * 汇总角色功能权限
+     *
+     * @param roleIdList 角色id集合
+     * @return {@link List}<{@link SysRoleFunctionPermissionVO}>
+     */
+    List<SysRoleFunctionPermissionVO> summaryRoleFunctionPermissions(List<Long> roleIdList);
+
+    /**
+     * 角色列表查询角色功能权限
+     *
+     * @param roleIdList 角色id列表
+     * @return {@link Map}<{@link Long}, {@link List}<{@link SysRoleFunctionPermissionVO}>>
+     */
+    Map<Long, List<SysRoleFunctionPermissionVO>> roleListQueryRoleFunctionPermissions(List<Long> roleIdList);
+
+    /**
+     * 指定角色权限设置功能
+     *
+     * @param roleId                   角色id
+     * @param functionPermissionIdList 功能权限id列表
+     */
+    void specifyTheRoleToSetFunctionPermissions(Long roleId, List<Long> functionPermissionIdList);
+
+    /**
+     * 删除角色所有的功能权限
+     *
+     * @param roleIdList 角色id列表
+     */
+    void deleteAllFunctionalPermissionsOfTheRole(List<Long> roleIdList);
 }

@@ -24,17 +24,28 @@
 
 package com.conifercone.uaa.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.ObjectUtil;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysUserRole;
+import com.conifercone.uaa.domain.vo.SysUserRoleVO;
 import com.conifercone.uaa.mapper.UserRoleMapper;
 import com.conifercone.uaa.service.IUserRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 用户角色service实现
@@ -45,6 +56,13 @@ import java.util.Optional;
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, SysUserRole> implements IUserRoleService {
 
+    @Resource
+    Snowflake snowflake;
+
+    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "UserRole:")
+    @SuppressWarnings("unused")
+    private Cache<Long, SysUserRoleVO> userRoleCache;
+
     /**
      * 基于用户id查询用户角色关系
      *
@@ -52,10 +70,80 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, SysUserRole
      * @return {@link List}<{@link SysUserRole}>
      */
     @Override
-    public List<SysUserRole> queryUserRoleRelationshipBasedOnUserId(Long userId) {
+    public List<SysUserRoleVO> queryUserRoleRelationshipBasedOnUserId(Long userId) {
         LambdaQueryWrapper<SysUserRole> sysUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserRoleLambdaQueryWrapper.eq(ObjectUtil.isNotEmpty(userId), SysUserRole::getUserId, userId);
         return Optional.ofNullable(this.list(sysUserRoleLambdaQueryWrapper))
-                .orElseGet(CollUtil::newLinkedList);
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysUserRole -> BeanUtil.copyProperties(sysUserRole, SysUserRoleVO.class))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 基于用户id列表查询用户角色关系
+     *
+     * @param userIdList 用户id列表
+     * @return {@link Map}<{@link Long}, {@link List}<{@link SysUserRoleVO}>>
+     */
+    @Override
+    public Map<Long, List<SysUserRoleVO>> queryUserRoleRelationshipBasedOnUserId(List<Long> userIdList) {
+        LambdaQueryWrapper<SysUserRole> sysUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysUserRoleLambdaQueryWrapper.in(CollUtil.isNotEmpty(userIdList), SysUserRole::getUserId, userIdList);
+        return Optional.ofNullable(this.list(sysUserRoleLambdaQueryWrapper))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysUserRole -> BeanUtil.copyProperties(sysUserRole, SysUserRoleVO.class))
+                .collect(Collectors.groupingBy(SysUserRoleVO::getUserId));
+    }
+
+    /**
+     * 指定用户设置角色
+     *
+     * @param userId  用户id
+     * @param roleIds 角色id
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void specifyUserSettingsRole(Long userId, List<Long> roleIds) {
+        if (CollUtil.isNotEmpty(roleIds)) {
+            final List<SysUserRole> sysUserRoleList = roleIds.stream().map(roleId -> {
+                final long userRoleId = snowflake.nextId();
+                final SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setId(userRoleId);
+                sysUserRole.setUserId(userId);
+                sysUserRole.setRoleId(roleId);
+                return sysUserRole;
+            }).collect(Collectors.toList());
+            this.saveBatch(sysUserRoleList);
+            final Map<Long, SysUserRoleVO> sysUserRoleVOMap = sysUserRoleList
+                    .stream()
+                    .map(sysUserRole -> BeanUtil.copyProperties(sysUserRole, SysUserRoleVO.class))
+                    .collect(Collectors.toList())
+                    .stream()
+                    .collect(Collectors.toMap(SysUserRoleVO::getId, sysUserRoleVO -> sysUserRoleVO));
+            userRoleCache.PUT_ALL(sysUserRoleVOMap);
+        }
+    }
+
+    /**
+     * 删除用户所有的角色
+     *
+     * @param userIdList 用户id集合
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAllRolesOfTheUser(List<Long> userIdList) {
+        LambdaQueryWrapper<SysUserRole> sysUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysUserRoleLambdaQueryWrapper.in(CollUtil.isNotEmpty(userIdList), SysUserRole::getUserId, userIdList);
+        List<SysUserRoleVO> sysUserRoleVOS = Optional
+                .ofNullable(this.list(sysUserRoleLambdaQueryWrapper))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(sysUserRole -> BeanUtil.copyProperties(sysUserRole, SysUserRoleVO.class))
+                .collect(Collectors.toList());
+        List<Long> roleIdList = sysUserRoleVOS.stream().map(SysUserRoleVO::getId).collect(Collectors.toList());
+        this.removeByIds(roleIdList);
+        userRoleCache.REMOVE_ALL(new HashSet<>(roleIdList));
     }
 }

@@ -26,6 +26,7 @@ package com.conifercone.uaa.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.conifercone.uaa.domain.enumerate.DataPermissions;
+import com.conifercone.uaa.domain.enumerate.UserSex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -55,7 +56,7 @@ public class SysUser extends BaseEntity {
     private String realName;
 
     @ApiModelProperty(value = "性别")
-    private String sex;
+    private UserSex sex;
 
     @ApiModelProperty(value = "手机号")
     private String phoneNumber;

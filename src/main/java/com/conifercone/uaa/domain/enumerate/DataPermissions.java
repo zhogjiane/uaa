@@ -37,15 +37,15 @@ import lombok.Getter;
 @Getter
 public enum DataPermissions {
 
+    DIY(0, "自定义sql过滤"),
     ALL(1, "全部"),
     DEPT(2, "本人所在组织机构"),
     SELF(3, "本人"),
-    DEPT_SETS(4, "自定义组织机构"),
-    DIY(5, "自定义sql过滤");
+    DEPT_SETS(4, "自定义组织机构");
 
-    DataPermissions(int code, String description) {
+    DataPermissions(int code, String msg) {
         this.code = code;
-        this.description = description;
+        this.msg = msg;
     }
 
     /**
@@ -58,5 +58,5 @@ public enum DataPermissions {
      * 数据权限范围描述
      */
     @JsonValue
-    private final String description;
+    private final String msg;
 }

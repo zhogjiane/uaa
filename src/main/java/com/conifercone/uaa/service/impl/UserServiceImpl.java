@@ -36,7 +36,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysUser;
-import com.conifercone.uaa.domain.entity.SysUserRole;
 import com.conifercone.uaa.domain.enumerate.ResultCode;
 import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.SysUserRoleVO;
@@ -52,10 +51,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -116,34 +112,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
         //保存用户信息
         this.save(sysUser);
         //保存用户角色信息
-        saveUserRoleInformation(newUser, userId);
+        userRoleService.specifyUserSettingsRole(userId, newUser.getRoleIds());
         final SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(userId), SysUserVO.class);
+        List<Long> roleIdList = Optional.ofNullable(userRoleService.queryUserRoleRelationshipBasedOnUserId(userId))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(SysUserRoleVO::getRoleId)
+                .collect(Collectors.toList());
+        sysUserVO.setRoleIds(roleIdList);
         //去除密码等敏感信息
         sysUserVO.setPassword("");
         userCache.PUT(sysUserVO.getId(), sysUserVO);
         return sysUserVO;
-    }
-
-    private void saveUserRoleInformation(SysUserVO newUser, long userId) {
-        final List<Long> roleIds = newUser.getRoleIds();
-        if (CollUtil.isNotEmpty(roleIds)) {
-            final List<SysUserRole> sysUserRoleList = roleIds.stream().map(roleId -> {
-                final long userRoleId = snowflake.nextId();
-                final SysUserRole sysUserRole = new SysUserRole();
-                sysUserRole.setId(userRoleId);
-                sysUserRole.setUserId(userId);
-                sysUserRole.setRoleId(roleId);
-                return sysUserRole;
-            }).collect(Collectors.toList());
-            userRoleService.saveBatch(sysUserRoleList);
-            final Map<Long, SysUserRoleVO> sysUserRoleVOMap = sysUserRoleList
-                    .stream()
-                    .map(sysUserRole -> BeanUtil.copyProperties(sysUserRole, SysUserRoleVO.class))
-                    .collect(Collectors.toList())
-                    .stream()
-                    .collect(Collectors.toMap(SysUserRoleVO::getId, sysUserRoleVO -> sysUserRoleVO));
-            userRoleCache.PUT_ALL(sysUserRoleVOMap);
-        }
     }
 
     /**
@@ -157,6 +137,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     public List<SysUserVO> deleteUsers(List<Long> sysUserIdList) {
         final List<SysUser> sysUsers = this.listByIds(sysUserIdList);
         this.removeByIds(sysUserIdList);
+        userRoleService.deleteAllRolesOfTheUser(sysUserIdList);
         userCache.REMOVE_ALL(new HashSet<>(sysUserIdList));
         return Optional.ofNullable(sysUsers).orElseGet(CollUtil::newLinkedList)
                 .stream()
@@ -174,6 +155,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Transactional(rollbackFor = Exception.class)
     public SysUserVO modifyUser(SysUserVO newUser) {
         this.updateById(BeanUtil.copyProperties(newUser, SysUser.class));
+        //删除用户角色关系
+        LinkedList<Long> userIdList = CollUtil.newLinkedList();
+        userIdList.add(newUser.getId());
+        userRoleService.deleteAllRolesOfTheUser(userIdList);
+        //重新设置用户角色关系
+        userRoleService.specifyUserSettingsRole(newUser.getId(), newUser.getRoleIds());
         final SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(newUser.getId()), SysUserVO.class);
         userCache.PUT(newUser.getId(), sysUserVO);
         return sysUserVO;
@@ -198,10 +185,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
                 .orderByDesc(SysUser::getUpdateTime);
         Page<SysUser> page = this.page(new Page<>(pageNo, pageSize), sysUserLambdaQueryWrapper);
         final List<SysUser> sysUserList = page.getRecords();
+        final List<Long> sysUserIdList = sysUserList.stream().map(SysUser::getId).collect(Collectors.toList());
+        final Map<Long, List<SysUserRoleVO>> relationshipBasedOnUserId = userRoleService.queryUserRoleRelationshipBasedOnUserId(sysUserIdList);
         IPage<SysUserVO> sysUserVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        final List<SysUserVO> sysUserVOList = Optional.ofNullable(sysUserList).orElseGet(CollUtil::newLinkedList)
+        final List<SysUserVO> sysUserVOList = Optional.of(sysUserList).orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysUser -> BeanUtil.copyProperties(sysUser, SysUserVO.class))
+                .map(newSysUser -> newSysUser.setRoleIds(Optional.ofNullable(relationshipBasedOnUserId.get(newSysUser.getId()))
+                        .orElseGet(CollUtil::newLinkedList)
+                        .stream()
+                        .map(SysUserRoleVO::getRoleId)
+                        .collect(Collectors.toList())))
                 .collect(Collectors.toList());
         sysUserVOPage.setRecords(sysUserVOList);
         return sysUserVOPage;
