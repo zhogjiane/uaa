@@ -117,6 +117,7 @@ class RoleServiceImplTest {
         sysRoleVO2.setId(newRole.getId());
         sysRoleVO2.setRoleName("管理员修改后");
         SysRoleVO modifyRole = roleService.modifyRole(sysRoleVO2);
+        logger.info(">>>>>>>>>>>>>>>>" + modifyRole.toString());
         Assertions.assertNotNull(modifyRole);
         Assertions.assertEquals("管理员修改后", modifyRole.getRoleName());
         rolesCache.REMOVE(modifyRole.getId());
