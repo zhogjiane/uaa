@@ -73,17 +73,20 @@
   <a href="https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap/3.0.3">
     <img alt="spring-cloud-starter-bootstrap Version" src="https://img.shields.io/badge/spring--cloud--starter--bootstrap-2020.0.3-brightgreen">
   </a>
-  <a href="https://mvnrepository.com/artifact/cn.dev33/sa-token-spring-boot-starter/1.24.0">
-    <img alt="sa-token-spring-boot-starter Version" src="https://img.shields.io/badge/sa--token--spring--boot--starter-1.24.0-brightgreen">
+  <a href="https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-dubbo">
+    <img alt="spring-cloud-starter-dubbo Version" src="https://img.shields.io/badge/spring--cloud--starter--dubbo-2021.1-brightgreen">
+  </a>
+  <a href="https://mvnrepository.com/artifact/cn.dev33/sa-token-spring-boot-starter/1.25.0">
+    <img alt="sa-token-spring-boot-starter Version" src="https://img.shields.io/badge/sa--token--spring--boot--starter-1.25.0-brightgreen">
   </a>
   <a href="https://mvnrepository.com/artifact/cn.hutool/hutool-all/5.7.7">
     <img alt="hutool-all Version" src="https://img.shields.io/badge/hutool--all-5.7.7-brightgreen">
   </a>
-  <a href="https://mvnrepository.com/artifact/cn.dev33/sa-token-dao-redis-jackson/1.24.0">
-    <img alt="sa-token-dao-redis-jackson Version" src="https://img.shields.io/badge/sa--token--dao--redis--jackson-1.24.0-brightgreen">
+  <a href="https://mvnrepository.com/artifact/cn.dev33/sa-token-dao-redis-jackson/1.25.0">
+    <img alt="sa-token-dao-redis-jackson Version" src="https://img.shields.io/badge/sa--token--dao--redis--jackson-1.25.0-brightgreen">
   </a>
-  <a href="https://mvnrepository.com/artifact/cn.dev33/sa-token-oauth2/1.24.0">
-    <img alt="sa-token-oauth2 Version" src="https://img.shields.io/badge/sa--token--oauth2-1.24.0-brightgreen">
+  <a href="https://mvnrepository.com/artifact/cn.dev33/sa-token-oauth2/1.25.0">
+    <img alt="sa-token-oauth2 Version" src="https://img.shields.io/badge/sa--token--oauth2-1.25.0-brightgreen">
   </a>
   <a href="https://mvnrepository.com/artifact/org.apache.commons/commons-pool2/2.10.0">
     <img alt="commons-pool2 Version" src="https://img.shields.io/badge/commons--pool2-2.10.0-brightgreen">
@@ -99,6 +102,9 @@
   </a>
   <a href="https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test/2.5.3">
     <img alt="spring-boot-starter-test Version" src="https://img.shields.io/badge/spring--boot--starter--test-2.5.3-brightgreen">
+  </a>
+  <a href="https://package-search.jetbrains.com/package?id=org.apache.commons%3Acommons-lang3">
+    <img alt="commons-lang3 Version" src="https://img.shields.io/badge/commons--lang3-3.12.0-brightgreen">
   </a>
 </p>
 
