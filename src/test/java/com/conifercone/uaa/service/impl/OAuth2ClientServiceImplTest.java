@@ -25,6 +25,9 @@
 package com.conifercone.uaa.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.UaaApplicationServer;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
@@ -55,6 +58,10 @@ class OAuth2ClientServiceImplTest {
     @Resource
     IOAuth2ClientService oauth2ClientService;
 
+    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "OAuth2Client:")
+    @SuppressWarnings("unused")
+    private Cache<Long, SysOAuth2ClientVO> oauth2ClientCache;
+
     private static final Logger logger = Logger.getLogger(FunctionPermissionServiceImplTest.class);
 
     @BeforeEach
@@ -76,6 +83,7 @@ class OAuth2ClientServiceImplTest {
         SysOAuth2ClientVO newOAuth2Client = oauth2ClientService.newOAuth2Client(sysOAuth2ClientVO);
         logger.info(">>>>>>>>>>>>>>>>" + newOAuth2Client.toString());
         Assertions.assertNotNull(newOAuth2Client);
+        oauth2ClientCache.REMOVE(newOAuth2Client.getId());
     }
 
     @Test
@@ -106,9 +114,12 @@ class OAuth2ClientServiceImplTest {
         logger.info(">>>>>>>>>>>>>>>>" + afterModificationOAuth2Client.toString());
         Assertions.assertNotNull(newOAuth2Client);
         Assertions.assertEquals("测试客户端修改", afterModificationOAuth2Client.getClientId());
+        oauth2ClientCache.REMOVE(afterModificationOAuth2Client.getId());
     }
 
     @Test
+    @Transactional
+    @Rollback
     void pagingQueryOAuth2Client() {
         SysOAuth2ClientVO sysOAuth2ClientVO = new SysOAuth2ClientVO();
         sysOAuth2ClientVO.setClientId("测试客户端").setClientSecret("测试客户端").setAllowUrl("*").setContractScope("all");
@@ -118,5 +129,6 @@ class OAuth2ClientServiceImplTest {
         logger.info(">>>>>>>>>>>>>>>>" + sysOAuth2ClientVOIPage.getRecords().toString());
         Assertions.assertNotNull(newOAuth2Client);
         Assertions.assertEquals(2, sysOAuth2ClientVOIPage.getRecords().size());
+        oauth2ClientCache.REMOVE(newOAuth2Client.getId());
     }
 }

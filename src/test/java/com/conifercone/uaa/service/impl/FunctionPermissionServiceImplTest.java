@@ -25,6 +25,9 @@
 package com.conifercone.uaa.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.conifercone.uaa.UaaApplicationServer;
 import com.conifercone.uaa.domain.exception.BizException;
@@ -55,6 +58,10 @@ class FunctionPermissionServiceImplTest {
 
     @Resource
     IFunctionPermissionService functionPermissionService;
+
+    @CreateCache(expire = 100, localExpire = 100, cacheType = CacheType.BOTH, name = "FunctionPermission:")
+    @SuppressWarnings("unused")
+    private Cache<Long, SysFunctionPermissionVO> functionPermissionCache;
 
     private static final Logger logger = Logger.getLogger(FunctionPermissionServiceImplTest.class);
 
@@ -89,6 +96,7 @@ class FunctionPermissionServiceImplTest {
         Assertions.assertEquals(4000, bizException.getCode());
         logger.info(">>>>>>>>>>>>>>>>>>" + newSysFunctionPermissionVO.toString());
         Assertions.assertNotNull(newSysFunctionPermissionVO);
+        functionPermissionCache.REMOVE(newSysFunctionPermissionVO.getId());
     }
 
     /**
@@ -132,12 +140,15 @@ class FunctionPermissionServiceImplTest {
         logger.info(">>>>>>>>>>>>>>>>>>" + modifyFunctionPermission.toString());
         Assertions.assertNotNull(newSysFunctionPermissionVO);
         Assertions.assertEquals("用户修改后", modifyFunctionPermission.getPermissionName());
+        functionPermissionCache.REMOVE(modifyFunctionPermission.getId());
     }
 
     /**
      * 分页查询功能权限
      */
     @Test
+    @Transactional
+    @Rollback
     void pagingQueryFunctionPermissions() {
         IPage<SysFunctionPermissionVO> sysFunctionPermissionVOIPage = functionPermissionService
                 .pagingQueryFunctionPermissions(1, 10, new SysFunctionPermissionVO());
