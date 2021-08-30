@@ -78,11 +78,15 @@ class FunctionPermissionServiceImplTest {
         SysFunctionPermissionVO sysFunctionPermissionVO = new SysFunctionPermissionVO();
         sysFunctionPermissionVO.setPermissionCode("user-add");
         sysFunctionPermissionVO.setPermissionName("用户新增");
+        sysFunctionPermissionVO.setPermissionScope("user");
         SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
         SysFunctionPermissionVO sysFunctionPermissionVO2 = new SysFunctionPermissionVO();
         sysFunctionPermissionVO2.setPermissionCode("user-add");
         sysFunctionPermissionVO2.setPermissionName("用户新增");
-        Assertions.assertThrows(BizException.class, () -> functionPermissionService.newFunctionPermission(sysFunctionPermissionVO));
+        sysFunctionPermissionVO2.setPermissionScope("user");
+        BizException bizException = Assertions.assertThrows(BizException.class, () ->
+                functionPermissionService.newFunctionPermission(sysFunctionPermissionVO));
+        Assertions.assertEquals(4000, bizException.getCode());
         logger.info(">>>>>>>>>>>>>>>>>>" + newSysFunctionPermissionVO.toString());
         Assertions.assertNotNull(newSysFunctionPermissionVO);
     }
@@ -97,6 +101,7 @@ class FunctionPermissionServiceImplTest {
         SysFunctionPermissionVO sysFunctionPermissionVO = new SysFunctionPermissionVO();
         sysFunctionPermissionVO.setPermissionCode("user-del");
         sysFunctionPermissionVO.setPermissionName("用户删除");
+        sysFunctionPermissionVO.setPermissionScope("user");
         SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
         LinkedList<Long> idList = CollUtil.newLinkedList();
         idList.add(newSysFunctionPermissionVO.getId());
@@ -116,10 +121,12 @@ class FunctionPermissionServiceImplTest {
         SysFunctionPermissionVO sysFunctionPermissionVO = new SysFunctionPermissionVO();
         sysFunctionPermissionVO.setPermissionCode("user-modify");
         sysFunctionPermissionVO.setPermissionName("用户修改");
+        sysFunctionPermissionVO.setPermissionScope("user");
         SysFunctionPermissionVO newSysFunctionPermissionVO = functionPermissionService.newFunctionPermission(sysFunctionPermissionVO);
         SysFunctionPermissionVO afterModification = new SysFunctionPermissionVO();
         afterModification.setPermissionCode("user-modify");
         afterModification.setPermissionName("用户修改后");
+        afterModification.setPermissionScope("user");
         afterModification.setId(newSysFunctionPermissionVO.getId());
         SysFunctionPermissionVO modifyFunctionPermission = functionPermissionService.modifyFunctionPermission(afterModification);
         logger.info(">>>>>>>>>>>>>>>>>>" + modifyFunctionPermission.toString());
