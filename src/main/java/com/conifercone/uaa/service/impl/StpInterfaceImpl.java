@@ -26,14 +26,19 @@ package com.conifercone.uaa.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.conifercone.uaa.domain.entity.SysFunctionPermission;
 import com.conifercone.uaa.domain.entity.SysRole;
+import com.conifercone.uaa.domain.entity.SysRoleFunctionPermission;
 import com.conifercone.uaa.domain.entity.SysUserRole;
+import com.conifercone.uaa.service.IFunctionPermissionService;
+import com.conifercone.uaa.service.IRoleFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleService;
 import com.conifercone.uaa.service.IUserRoleService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,6 +56,12 @@ public class StpInterfaceImpl implements StpInterface {
     IUserRoleService userRoleService;
 
     @Resource
+    IRoleFunctionPermissionService roleFunctionPermissionService;
+
+    @Resource
+    IFunctionPermissionService functionPermissionService;
+
+    @Resource
     IRoleService roleService;
 
     /**
@@ -62,15 +73,29 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        // 本list仅做模拟，实际项目中要根据具体业务逻辑来查询权限
-        List<String> list = new ArrayList<>();
-        list.add("101");
-        list.add("user-add");
-        list.add("user-delete");
-        list.add("user-update");
-        list.add("user-get");
-        list.add("article-get");
-        return list;
+        LambdaQueryWrapper<SysUserRole> sysUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysUserRoleLambdaQueryWrapper.eq(ObjectUtil.isNotNull(loginId), SysUserRole::getUserId, loginId);
+        //查询当前用户所拥有的角色
+        List<Long> roleIdList = Optional.ofNullable(userRoleService.list(sysUserRoleLambdaQueryWrapper))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(SysUserRole::getRoleId)
+                .collect(Collectors.toList());
+        //查询角色对应的权限
+        LambdaQueryWrapper<SysRoleFunctionPermission> sysRoleFunctionPermissionLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysRoleFunctionPermissionLambdaQueryWrapper
+                .in(CollUtil.isNotEmpty(roleIdList), SysRoleFunctionPermission::getRoleId, roleIdList);
+        List<Long> permissionIdList = Optional.ofNullable(roleFunctionPermissionService.list(sysRoleFunctionPermissionLambdaQueryWrapper))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(SysRoleFunctionPermission::getPermissionId)
+                .distinct()
+                .collect(Collectors.toList());
+        return Optional.ofNullable(functionPermissionService.listByIds(permissionIdList))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(SysFunctionPermission::getPermissionCode)
+                .collect(Collectors.toList());
     }
 
     /**
