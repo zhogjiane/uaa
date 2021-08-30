@@ -59,6 +59,11 @@ public class SysFunctionPermissionVO extends BaseVO implements Serializable {
     @NotNull(message = "权限名称不能为空", groups = {Insert.class})
     private String permissionName;
 
+    @ApiModelProperty(value = "权限范围")
+    @NotBlank(message = "权限范围不能为空", groups = {Insert.class})
+    @NotNull(message = "权限范围不能为空", groups = {Insert.class})
+    private String permissionScope;
+
     @Override
     public String toString() {
         return "SysFunctionPermissionVO{" +
@@ -71,6 +76,7 @@ public class SysFunctionPermissionVO extends BaseVO implements Serializable {
                 ", tenantId=" + tenantId +
                 ", permissionCode='" + permissionCode + '\'' +
                 ", permissionName='" + permissionName + '\'' +
+                ", permissionScope='" + permissionScope + '\'' +
                 '}';
     }
 }

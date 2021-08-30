@@ -36,9 +36,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysOAuth2Client;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.SysOAuth2ClientVO;
 import com.conifercone.uaa.mapper.OAuth2ClientMapper;
 import com.conifercone.uaa.service.IOAuth2ClientService;
+import com.conifercone.uaa.util.DataValidationUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,10 @@ public class OAuth2ClientServiceImpl extends ServiceImpl<OAuth2ClientMapper, Sys
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysOAuth2ClientVO newOAuth2Client(SysOAuth2ClientVO sysOAuth2ClientVO) {
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysOAuth2Client::getClientId, sysOAuth2ClientVO.getClientId()))) {
+            throw new BizException(ResultCode.DUPLICATE_CLIENT_ID, sysOAuth2ClientVO.getClientId());
+        }
         final long id = snowflake.nextId();
         sysOAuth2ClientVO.setId(id);
         this.save(BeanUtil.copyProperties(sysOAuth2ClientVO, SysOAuth2Client.class));

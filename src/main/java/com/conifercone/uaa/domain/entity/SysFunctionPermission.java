@@ -25,4 +25,7 @@ public class SysFunctionPermission extends BaseEntity {
 
     @ApiModelProperty(value = "权限名称")
     private String permissionName;
+
+    @ApiModelProperty(value = "权限范围")
+    private String permissionScope;
 }

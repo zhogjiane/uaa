@@ -37,11 +37,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysUser;
 import com.conifercone.uaa.domain.entity.SysUserRole;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.SysUserRoleVO;
 import com.conifercone.uaa.domain.vo.SysUserVO;
 import com.conifercone.uaa.mapper.UserMapper;
 import com.conifercone.uaa.service.IUserRoleService;
 import com.conifercone.uaa.service.IUserService;
+import com.conifercone.uaa.util.DataValidationUtil;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -92,6 +95,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysUserVO newUsers(SysUserVO newUser) {
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysUser::getAccountName, newUser.getAccountName()))) {
+            throw new BizException(ResultCode.DUPLICATE_ACCOUNT_NAME, newUser.getAccountName());
+        }
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysUser::getPhoneNumber, newUser.getPhoneNumber()))) {
+            throw new BizException(ResultCode.DUPLICATE_PHONE_NUMBER, newUser.getPhoneNumber());
+        }
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysUser::getEmail, newUser.getEmail()))) {
+            throw new BizException(ResultCode.DUPLICATE_EMAIL_ADDRESS, newUser.getEmail());
+        }
         //设置用户id
         final long userId = snowflake.nextId();
         newUser.setId(userId);
@@ -101,6 +116,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
         //保存用户信息
         this.save(sysUser);
         //保存用户角色信息
+        saveUserRoleInformation(newUser, userId);
+        final SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(userId), SysUserVO.class);
+        //去除密码等敏感信息
+        sysUserVO.setPassword("");
+        userCache.PUT(sysUserVO.getId(), sysUserVO);
+        return sysUserVO;
+    }
+
+    private void saveUserRoleInformation(SysUserVO newUser, long userId) {
         final List<Long> roleIds = newUser.getRoleIds();
         if (CollUtil.isNotEmpty(roleIds)) {
             final List<SysUserRole> sysUserRoleList = roleIds.stream().map(roleId -> {
@@ -120,11 +144,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
                     .collect(Collectors.toMap(SysUserRoleVO::getId, sysUserRoleVO -> sysUserRoleVO));
             userRoleCache.PUT_ALL(sysUserRoleVOMap);
         }
-        final SysUserVO sysUserVO = BeanUtil.copyProperties(this.getById(userId), SysUserVO.class);
-        //去除密码等敏感信息
-        sysUserVO.setPassword("");
-        userCache.PUT(sysUserVO.getId(), sysUserVO);
-        return sysUserVO;
     }
 
     /**

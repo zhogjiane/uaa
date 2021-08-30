@@ -36,9 +36,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.conifercone.uaa.domain.entity.SysRole;
+import com.conifercone.uaa.domain.enumerate.ResultCode;
+import com.conifercone.uaa.domain.exception.BizException;
 import com.conifercone.uaa.domain.vo.SysRoleVO;
 import com.conifercone.uaa.mapper.RoleMapper;
 import com.conifercone.uaa.service.IRoleService;
+import com.conifercone.uaa.util.DataValidationUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysRoleVO newRole(SysRoleVO sysRoleVO) {
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysRole::getRoleCode, sysRoleVO.getRoleCode()))) {
+            throw new BizException(ResultCode.DUPLICATE_ROLE_CODE, sysRoleVO.getRoleCode());
+        }
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysRole::getRoleName, sysRoleVO.getRoleName()))) {
+            throw new BizException(ResultCode.DUPLICATE_ROLE_NAME, sysRoleVO.getRoleName());
+        }
         final long id = snowflake.nextId();
         sysRoleVO.setId(id);
         this.save(BeanUtil.copyProperties(sysRoleVO, SysRole.class));

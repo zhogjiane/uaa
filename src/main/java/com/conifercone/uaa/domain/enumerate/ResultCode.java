@@ -52,13 +52,22 @@ public enum ResultCode {
     USER_LOGIN_FAIL(2001, "用户名或密码错误"),
     USER_NOT_LOGIN(2002, "用户还未登录,请先登录"),
     NO_PERMISSION(2003, "权限不足,请联系管理员"),
+    DUPLICATE_ACCOUNT_NAME(2004, "账户名称重复"),
+    DUPLICATE_PHONE_NUMBER(2005, "手机号重复"),
+    DUPLICATE_EMAIL_ADDRESS(2006, "邮箱地址重复"),
 
     //3000系列客户端错误
     CLIENT_NOT_EXIST(3000, "客户端不存在"),
+    DUPLICATE_CLIENT_ID(3001, "客户端id重复"),
 
     //4000系列功能权限异常
     DUPLICATE_FUNCTION_PERMISSION_CODE(4000, "功能权限编码重复"),
-    DUPLICATE_FUNCTION_PERMISSION_NAME(4001, "功能权限名称重复");
+    DUPLICATE_FUNCTION_PERMISSION_NAME(4001, "功能权限名称重复"),
+    DUPLICATE_FUNCTION_PERMISSION_SCOPE(4002, "功能权限范围重复"),
+
+    //5000系列角色异常
+    DUPLICATE_ROLE_CODE(5000, "角色编码重复"),
+    DUPLICATE_ROLE_NAME(5001, "角色名称重复");
 
     private final int code;
     private final String msg;

@@ -85,6 +85,10 @@ public class FunctionPermissionServiceImpl extends ServiceImpl<FunctionPermissio
                 SysFunctionPermission::getPermissionName, newSysFunctionPermissionVO.getPermissionName()))) {
             throw new BizException(ResultCode.DUPLICATE_FUNCTION_PERMISSION_NAME, newSysFunctionPermissionVO.getPermissionName());
         }
+        if (Boolean.TRUE.equals(DataValidationUtil.determineTheFieldValueDatabaseDuplication(this,
+                SysFunctionPermission::getPermissionScope, newSysFunctionPermissionVO.getPermissionScope()))) {
+            throw new BizException(ResultCode.DUPLICATE_FUNCTION_PERMISSION_SCOPE, newSysFunctionPermissionVO.getPermissionScope());
+        }
         final long id = snowflake.nextId();
         newSysFunctionPermissionVO.setId(id);
         this.save(BeanUtil.copyProperties(newSysFunctionPermissionVO, SysFunctionPermission.class));
