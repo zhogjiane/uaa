@@ -22,19 +22,17 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.service.impl;
+package com.conifercone.uaa.provider.impl;
 
-import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.collection.CollUtil;
 import com.conifercone.uaa.domain.entity.SysFunctionPermission;
-import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
 import com.conifercone.uaa.domain.vo.SysUserRoleVO;
+import com.conifercone.uaa.provider.UserRoleFunctionPermissionProvider;
 import com.conifercone.uaa.service.IFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleFunctionPermissionService;
-import com.conifercone.uaa.service.IRoleService;
 import com.conifercone.uaa.service.IUserRoleService;
-import org.springframework.stereotype.Component;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -42,13 +40,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 自定义权限验证接口扩展
+ * 用户角色功能权限提供方实现类
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/21
+ * @date 2021/8/30
  */
-@Component
-public class StpInterfaceImpl implements StpInterface {
+@DubboService
+@SuppressWarnings("unused")
+public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionPermissionProvider {
 
     @Resource
     IUserRoleService userRoleService;
@@ -59,20 +58,16 @@ public class StpInterfaceImpl implements StpInterface {
     @Resource
     IFunctionPermissionService functionPermissionService;
 
-    @Resource
-    IRoleService roleService;
-
     /**
-     * 获得权限列表
+     * 获取用户功能权限
      *
-     * @param loginId   登录id
-     * @param loginType 登录类型
+     * @param userId 用户id
      * @return {@link List}<{@link String}>
      */
     @Override
-    public List<String> getPermissionList(Object loginId, String loginType) {
+    public List<String> obtainUserFunctionPermissions(Long userId) {
         //查询当前用户所拥有的角色
-        List<Long> roleIdList = Optional.ofNullable(userRoleService.queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(loginId))))
+        List<Long> roleIdList = Optional.ofNullable(userRoleService.queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(userId))))
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(SysUserRoleVO::getRoleId)
@@ -86,27 +81,6 @@ public class StpInterfaceImpl implements StpInterface {
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(SysFunctionPermission::getPermissionCode)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 获取角色列表
-     *
-     * @param loginId   登录id
-     * @param loginType 登录类型
-     * @return {@link List}<{@link String}>
-     */
-    @Override
-    public List<String> getRoleList(Object loginId, String loginType) {
-        List<Long> roleIdList = userRoleService
-                .queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(loginId)))
-                .stream()
-                .map(SysUserRoleVO::getRoleId)
-                .collect(Collectors.toList());
-        return Optional.ofNullable(roleService.listByIds(roleIdList))
-                .orElseGet(CollUtil::newLinkedList)
-                .stream()
-                .map(SysRole::getRoleCode)
                 .collect(Collectors.toList());
     }
 }

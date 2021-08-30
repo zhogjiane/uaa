@@ -30,6 +30,8 @@ dependencyManagement {
 dependencies {
     // web模块
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // 数据校验
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // mysql驱动
@@ -46,6 +48,8 @@ dependencies {
     implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
     // bootstrap文件读取支持
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    // dubbo
+    implementation 'com.alibaba.cloud:spring-cloud-starter-dubbo'
     // saToken
     implementation 'cn.dev33:sa-token-spring-boot-starter:1.25.0'
     // hutool工具包
@@ -62,6 +66,8 @@ dependencies {
     implementation 'com.alicp.jetcache:jetcache-starter-redis:2.6.0'
     // lombok
     implementation 'org.projectlombok:lombok:1.18.20'
+    // commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     // 单元测试
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
