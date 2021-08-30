@@ -22,37 +22,37 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.configurations;
+package com.conifercone.uaa.domain.vo;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.baomidou.mybatisplus.core.injector.methods.Insert;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
- * <h1>安全配置类<h1/>
+ * 系统角色方法权限（RBAC）
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/16
+ * @date 2021/8/30
  */
-@Configuration
-public class SecurityConfig {
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "系统角色方法权限（RBAC）")
+public class SysRoleFunctionPermissionVO extends BaseVO implements Serializable {
 
-    /*
-     * 定义BCryptPasswordEncoder实例
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private static final long serialVersionUID = 4742086279323459609L;
 
-    /*
-     * 定义雪花算法bean实例
-     */
-    @Bean
-    public Snowflake snowflake() {
-        return IdUtil.getSnowflake();
-    }
+    @ApiModelProperty(value = "权限id")
+    @NotNull(message = "功能权限id不能为空", groups = {Insert.class})
+    private Long permissionId;
 
+    @ApiModelProperty(value = "角色id")
+    @NotNull(message = "角色id不能为空", groups = {Insert.class})
+    private Long roleId;
 }

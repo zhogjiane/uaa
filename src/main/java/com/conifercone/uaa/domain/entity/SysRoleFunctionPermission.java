@@ -22,37 +22,31 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.configurations;
+package com.conifercone.uaa.domain.entity;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
- * <h1>安全配置类<h1/>
+ * 系统角色方法权限（RBAC）
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/16
+ * @date 2021/8/30
  */
-@Configuration
-public class SecurityConfig {
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+@TableName("sys_role_function_permission")
+@ApiModel(value = "系统角色方法权限（RBAC）")
+public class SysRoleFunctionPermission extends BaseEntity {
 
-    /*
-     * 定义BCryptPasswordEncoder实例
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @ApiModelProperty(value = "权限id")
+    private Long permissionId;
 
-    /*
-     * 定义雪花算法bean实例
-     */
-    @Bean
-    public Snowflake snowflake() {
-        return IdUtil.getSnowflake();
-    }
-
+    @ApiModelProperty(value = "角色id")
+    private Long roleId;
 }
