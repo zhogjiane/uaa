@@ -27,10 +27,12 @@ package com.conifercone.uaa.provider;
 import cn.hutool.core.collection.CollUtil;
 import com.conifercone.dubbo.provider.UserRoleFunctionPermissionProvider;
 import com.conifercone.uaa.domain.entity.SysFunctionPermission;
+import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
 import com.conifercone.uaa.domain.vo.SysUserRoleVO;
 import com.conifercone.uaa.service.IFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleFunctionPermissionService;
+import com.conifercone.uaa.service.IRoleService;
 import com.conifercone.uaa.service.IUserRoleService;
 import org.apache.dubbo.config.annotation.DubboService;
 
@@ -58,6 +60,9 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
     @Resource
     IFunctionPermissionService functionPermissionService;
 
+    @Resource
+    IRoleService roleService;
+
     /**
      * 获取用户功能权限
      *
@@ -81,6 +86,25 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(SysFunctionPermission::getPermissionCode)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 得到所有用户的角色
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link String}>
+     */
+    @Override
+    public List<String> getAllRoleCodesOfTheUser(Long userId) {
+        List<Long> roleIdList = userRoleService.queryUserRoleRelationshipBasedOnUserId(userId)
+                .stream()
+                .map(SysUserRoleVO::getRoleId)
+                .collect(Collectors.toList());
+        return Optional.ofNullable(roleService.listByIds(roleIdList))
+                .orElseGet(CollUtil::newLinkedList)
+                .stream()
+                .map(SysRole::getRoleCode)
                 .collect(Collectors.toList());
     }
 }
