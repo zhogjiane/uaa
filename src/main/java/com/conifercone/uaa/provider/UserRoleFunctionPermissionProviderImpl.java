@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package com.conifercone.uaa.provider.impl;
+package com.conifercone.uaa.provider;
 
 import cn.hutool.core.collection.CollUtil;
+import com.conifercone.dubbo.provider.UserRoleFunctionPermissionProvider;
 import com.conifercone.uaa.domain.entity.SysFunctionPermission;
 import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
 import com.conifercone.uaa.domain.vo.SysUserRoleVO;
-import com.conifercone.uaa.provider.UserRoleFunctionPermissionProvider;
 import com.conifercone.uaa.service.IFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleFunctionPermissionService;
 import com.conifercone.uaa.service.IUserRoleService;
