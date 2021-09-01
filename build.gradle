@@ -15,9 +15,9 @@ sourceCompatibility = '1.8'
 version = "${PROJECT_VERSION}"
 
 repositories {
-    maven { url 'https://maven.aliyun.com/repository/public/' }
     mavenLocal()
     mavenCentral()
+    maven { url 'https://maven.aliyun.com/repository/public/' }
 }
 
 dependencyManagement {
