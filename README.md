@@ -106,6 +106,9 @@
   <a href="https://package-search.jetbrains.com/package?id=org.apache.commons%3Acommons-lang3">
     <img alt="commons-lang3 Version" src="https://img.shields.io/badge/commons--lang3-3.12.0-brightgreen">
   </a>
+  <a href="https://github.com/conifercone/doraemon">
+    <img alt="doraemon-dubbo-provider Version" src="https://img.shields.io/badge/doraemon--dubbo--provider-1.0.1-brightgreen">
+  </a>
 </p>
 
 ## 使用说明
