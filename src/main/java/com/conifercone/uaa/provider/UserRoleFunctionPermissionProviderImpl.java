@@ -24,8 +24,8 @@
 
 package com.conifercone.uaa.provider;
 
+import cn.conifercone.dubbo.provider.UserRoleFunctionPermissionProvider;
 import cn.hutool.core.collection.CollUtil;
-import com.conifercone.dubbo.provider.UserRoleFunctionPermissionProvider;
 import com.conifercone.uaa.domain.entity.SysFunctionPermission;
 import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;

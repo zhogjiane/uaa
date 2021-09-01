@@ -69,7 +69,7 @@ dependencies {
     // commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     // doraemon-dubbo-provider
-    implementation 'com.conifercone:doraemon-dubbo-provider:1.0.0'
+    implementation 'cn.conifercone:doraemon-dubbo-provider:1.0.1'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     // 单元测试
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
