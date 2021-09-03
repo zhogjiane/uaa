@@ -26,7 +26,6 @@ package com.conifercone.uaa.provider;
 
 import cn.conifercone.dubbo.provider.UserRoleFunctionPermissionProvider;
 import cn.hutool.core.collection.CollUtil;
-import com.conifercone.uaa.domain.entity.SysFunctionPermission;
 import com.conifercone.uaa.domain.entity.SysRole;
 import com.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
 import com.conifercone.uaa.domain.vo.SysUserRoleVO;
@@ -85,7 +84,7 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
         return Optional.ofNullable(functionPermissionService.listByIds(permissionIdList))
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
-                .map(SysFunctionPermission::getPermissionCode)
+                .map(sysFunctionPermission -> sysFunctionPermission.getPermissionScope().concat(":").concat(sysFunctionPermission.getPermissionCode()))
                 .collect(Collectors.toList());
     }
 
