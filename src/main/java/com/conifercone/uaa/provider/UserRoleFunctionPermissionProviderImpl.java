@@ -33,6 +33,7 @@ import com.conifercone.uaa.service.IFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleFunctionPermissionService;
 import com.conifercone.uaa.service.IRoleService;
 import com.conifercone.uaa.service.IUserRoleService;
+import com.conifercone.uaa.util.DubboUtil;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
@@ -70,6 +71,7 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
      */
     @Override
     public List<String> obtainUserFunctionPermissions(Long userId) {
+        DubboUtil.setRequestAttributesFromRpcContext();
         //查询当前用户所拥有的角色
         List<Long> roleIdList = Optional.ofNullable(userRoleService.queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(userId))))
                 .orElseGet(CollUtil::newLinkedList)
@@ -96,6 +98,7 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
      */
     @Override
     public List<String> getAllRoleCodesOfTheUser(Long userId) {
+        DubboUtil.setRequestAttributesFromRpcContext();
         List<Long> roleIdList = userRoleService.queryUserRoleRelationshipBasedOnUserId(userId)
                 .stream()
                 .map(SysUserRoleVO::getRoleId)
