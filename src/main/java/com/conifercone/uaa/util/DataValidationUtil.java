@@ -30,7 +30,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -53,7 +52,6 @@ public class DataValidationUtil {
     public static <T> Boolean determineTheFieldValueDatabaseDuplication(IService<T> service, SFunction<T, ?> columnName, Object comparisonValue) {
         LambdaQueryWrapper<T> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(ObjectUtil.isNotNull(comparisonValue), columnName, comparisonValue);
-        List<T> list = Optional.ofNullable(service.list(lambdaQueryWrapper)).orElseGet(CollUtil::newLinkedList);
-        return CollUtil.isNotEmpty(list);
+        return CollUtil.isNotEmpty(Optional.ofNullable(service.list(lambdaQueryWrapper)).orElseGet(CollUtil::newLinkedList));
     }
 }
