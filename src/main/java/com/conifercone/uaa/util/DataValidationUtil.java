@@ -26,7 +26,7 @@ package com.conifercone.uaa.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -50,8 +50,8 @@ public class DataValidationUtil {
      * @return {@link Boolean}
      */
     public static <T> Boolean determineTheFieldValueDatabaseDuplication(IService<T> service, SFunction<T, ?> columnName, Object comparisonValue) {
-        LambdaQueryWrapper<T> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(ObjectUtil.isNotNull(comparisonValue), columnName, comparisonValue);
-        return CollUtil.isNotEmpty(Optional.ofNullable(service.list(lambdaQueryWrapper)).orElseGet(CollUtil::newLinkedList));
+        return CollUtil.isNotEmpty(Optional.ofNullable(service.list(Wrappers.<T>lambdaQuery()
+                        .eq(ObjectUtil.isNotNull(comparisonValue), columnName, comparisonValue)))
+                .orElseGet(CollUtil::newLinkedList));
     }
 }
