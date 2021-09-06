@@ -24,12 +24,10 @@
 
 package cn.conifercone.uaa.configurations;
 
-import cn.conifercone.uaa.handler.UaaDataPermissionHandler;
 import cn.conifercone.uaa.handler.UaaMetaObjectHandler;
 import cn.conifercone.uaa.handler.UaaTenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -87,12 +85,8 @@ public class MybatisPlusConfig {
         paginationInnerInterceptor.setMaxLimit(MAX_LIMIT);
         //防止全表更新与删除插件: BlockAttackInnerInterceptor
         BlockAttackInnerInterceptor blockAttackInnerInterceptor = new BlockAttackInnerInterceptor();
-        // 添加数据权限插件
-        DataPermissionInterceptor dataPermissionInterceptor = new DataPermissionInterceptor();
-        dataPermissionInterceptor.setDataPermissionHandler(new UaaDataPermissionHandler());
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
         interceptor.addInnerInterceptor(blockAttackInnerInterceptor);
-        interceptor.addInnerInterceptor(dataPermissionInterceptor);
         return interceptor;
     }
 

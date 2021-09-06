@@ -43,9 +43,9 @@ public interface IRoleFunctionPermissionService extends IService<SysRoleFunction
      * 汇总角色功能权限
      *
      * @param roleIdList 角色id集合
-     * @return {@link List}<{@link SysRoleFunctionPermissionVO}>
+     * @return {@link List}<{@link Long}>
      */
-    List<SysRoleFunctionPermissionVO> summaryRoleFunctionPermissions(List<Long> roleIdList);
+    List<Long> summaryRoleFunctionPermissions(List<Long> roleIdList);
 
     /**
      * 角色列表查询角色功能权限

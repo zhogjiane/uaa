@@ -69,4 +69,15 @@
             </if>
         </where>
     </select>
+
+    <select id="queryUsersBasedOnId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
 </mapper>

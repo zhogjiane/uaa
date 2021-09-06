@@ -68,22 +68,18 @@ public class RoleFunctionPermissionServiceImpl extends
      * 汇总角色功能权限
      *
      * @param roleIdList 角色id集合
-     * @return {@link List}<{@link SysRoleFunctionPermissionVO}>
+     * @return {@link List}<{@link Long}>
      */
     @Override
-    public List<SysRoleFunctionPermissionVO> summaryRoleFunctionPermissions(List<Long> roleIdList) {
+    public List<Long> summaryRoleFunctionPermissions(List<Long> roleIdList) {
         LambdaQueryWrapper<SysRoleFunctionPermission> sysRoleFunctionPermissionLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysRoleFunctionPermissionLambdaQueryWrapper
                 .in(CollUtil.isNotEmpty(roleIdList), SysRoleFunctionPermission::getRoleId, roleIdList);
-        List<Long> permissionIdList = Optional.ofNullable(this.list(sysRoleFunctionPermissionLambdaQueryWrapper))
+        return Optional.ofNullable(this.list(sysRoleFunctionPermissionLambdaQueryWrapper))
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(SysRoleFunctionPermission::getPermissionId)
                 .distinct()
-                .collect(Collectors.toList());
-        return Optional.ofNullable(this.listByIds(permissionIdList)).orElseGet(CollUtil::newLinkedList)
-                .stream()
-                .map(sysRoleFunctionPermission -> BeanUtil.copyProperties(sysRoleFunctionPermission, SysRoleFunctionPermissionVO.class))
                 .collect(Collectors.toList());
     }
 

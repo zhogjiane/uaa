@@ -44,7 +44,7 @@ import javax.annotation.Nonnull;
  * @author sky5486560@gmail.com
  * @date 2021/8/13
  */
-@RestControllerAdvice(basePackages = {"com.conifercone.uaa.controller"})
+@RestControllerAdvice(basePackages = {"cn.conifercone.uaa.controller"})
 public class ResponseControllerAdviceHandler implements ResponseBodyAdvice<Object> {
 
     /**

@@ -22,33 +22,27 @@
  * SOFTWARE.
  */
 
-package cn.conifercone.uaa;
-
-import cn.dev33.satoken.SaManager;
-import com.alicp.jetcache.anno.config.EnableCreateCacheAnnotation;
-import com.alicp.jetcache.anno.config.EnableMethodCache;
-import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+package cn.conifercone.uaa.domain.constant;
 
 /**
- * 账户管理统一认证服务
+ * Jwt数据名称常量
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/12
+ * @date 2021/8/21
  */
-@Slf4j
-@SpringBootApplication
-@EnableDiscoveryClient
-@MapperScan(basePackages = {"cn.conifercone.uaa.mapper"})
-@EnableMethodCache(basePackages = "cn.conifercone.uaa")
-@EnableCreateCacheAnnotation
-public class UaaApplicationServer {
+public class JwtDataConstant {
 
-    public static void main(String[] args) {
-        SpringApplication.run(UaaApplicationServer.class, args);
-        log.info("启动成功：Sa-Token配置如下：" + SaManager.getConfig());
+    private JwtDataConstant() {
     }
+
+    /**
+     * 租户id
+     */
+    public static final String TENANT_ID = "tenantId";
+
+    /**
+     * 数据权限范围
+     */
+    public static final String DATA_PERMISSIONS = "dataPermissions";
+
 }

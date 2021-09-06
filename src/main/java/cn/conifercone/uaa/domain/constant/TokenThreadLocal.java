@@ -22,31 +22,21 @@
  * SOFTWARE.
  */
 
-package cn.conifercone.uaa.util;
-
-import org.apache.dubbo.rpc.RpcContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
+package cn.conifercone.uaa.domain.constant;
 
 /**
- * Dubbo RPC工具类
+ * token线程常量
  *
  * @author sky5486560@gmail.com
- * @date 2021/9/4
+ * @date 2021/9/6
  */
-public class DubboUtil {
+public class TokenThreadLocal {
 
-    private DubboUtil() {
+    private TokenThreadLocal() {
     }
 
     /**
-     * 设置请求属性
+     * 线程本地
      */
-    public static void setRequestAttributesFromRpcContext() {
-        HttpServletRequest request = RpcContext.getContext().getRequest(HttpServletRequest.class);
-        ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(request);
-        RequestContextHolder.setRequestAttributes(servletRequestAttributes);
-    }
+    public static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
 }

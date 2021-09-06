@@ -24,13 +24,11 @@
 
 package cn.conifercone.uaa.configurations;
 
-import cn.conifercone.uaa.domain.constant.UserSessionDataNameConstant;
 import cn.conifercone.uaa.domain.entity.SysUser;
 import cn.conifercone.uaa.domain.enumerate.ResultCode;
 import cn.conifercone.uaa.domain.exception.BizException;
 import cn.conifercone.uaa.mapper.UserMapper;
 import cn.dev33.satoken.oauth2.config.SaOAuth2Config;
-import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -68,10 +66,6 @@ public class OAuth2Config {
             }
             if (bCryptPasswordEncoder.matches(pwd, sysUser.getPassword())) {
                 StpUtil.login(sysUser.getId());
-                //自定义用户session数据
-                SaSession sessionByLoginId = StpUtil.getSessionByLoginId(sysUser.getId());
-                sessionByLoginId.set(UserSessionDataNameConstant.TENANT_ID, sysUser.getTenantId());
-                sessionByLoginId.set(UserSessionDataNameConstant.DATA_PERMISSIONS, sysUser.getDataPermissions().getCode());
                 sysUser.setPassword("");
                 return sysUser;
             }

@@ -24,17 +24,20 @@
 
 package cn.conifercone.uaa.provider;
 
-import cn.conifercone.dubbo.provider.UserRoleFunctionPermissionProvider;
+import cn.conifercone.grpc.provider.RoleCodes;
+import cn.conifercone.grpc.provider.UserFunctionPermissions;
+import cn.conifercone.grpc.provider.UserId;
+import cn.conifercone.grpc.provider.UserRoleFunctionPermissionProviderGrpc;
 import cn.conifercone.uaa.domain.entity.SysRole;
-import cn.conifercone.uaa.domain.vo.SysRoleFunctionPermissionVO;
 import cn.conifercone.uaa.domain.vo.SysUserRoleVO;
 import cn.conifercone.uaa.service.IFunctionPermissionService;
 import cn.conifercone.uaa.service.IRoleFunctionPermissionService;
 import cn.conifercone.uaa.service.IRoleService;
 import cn.conifercone.uaa.service.IUserRoleService;
-import cn.conifercone.uaa.util.DubboUtil;
 import cn.hutool.core.collection.CollUtil;
-import org.apache.dubbo.config.annotation.DubboService;
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
+import io.grpc.stub.StreamObserver;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -47,9 +50,9 @@ import java.util.stream.Collectors;
  * @author sky5486560@gmail.com
  * @date 2021/8/30
  */
-@DubboService
+@GrpcService
 @SuppressWarnings("unused")
-public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionPermissionProvider {
+public class UserRoleFunctionPermissionProviderImpl extends UserRoleFunctionPermissionProviderGrpc.UserRoleFunctionPermissionProviderImplBase {
 
     @Resource
     IUserRoleService userRoleService;
@@ -66,12 +69,13 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
     /**
      * 获取用户功能权限
      *
-     * @param userId 用户id
-     * @return {@link List}<{@link String}>
+     * @param request          请求
+     * @param responseObserver 响应的观察者
      */
     @Override
-    public List<String> obtainUserFunctionPermissions(Long userId) {
-        DubboUtil.setRequestAttributesFromRpcContext();
+    @InterceptorIgnore(dataPermission = "true")
+    public void obtainUserFunctionPermissions(UserId request, StreamObserver<UserFunctionPermissions> responseObserver) {
+        Long userId = Long.parseLong(request.getUserId());
         //查询当前用户所拥有的角色
         List<Long> roleIdList = Optional.ofNullable(userRoleService.queryUserRoleRelationshipBasedOnUserId(Long.parseLong(String.valueOf(userId))))
                 .orElseGet(CollUtil::newLinkedList)
@@ -79,34 +83,36 @@ public class UserRoleFunctionPermissionProviderImpl implements UserRoleFunctionP
                 .map(SysUserRoleVO::getRoleId)
                 .collect(Collectors.toList());
         //查询角色对应的权限
-        List<Long> permissionIdList = roleFunctionPermissionService.summaryRoleFunctionPermissions(roleIdList)
-                .stream()
-                .map(SysRoleFunctionPermissionVO::getPermissionId)
-                .collect(Collectors.toList());
-        return Optional.ofNullable(functionPermissionService.listByIds(permissionIdList))
+        List<Long> permissionIdList = roleFunctionPermissionService.summaryRoleFunctionPermissions(roleIdList);
+        List<String> collect = Optional.ofNullable(functionPermissionService.listByIds(permissionIdList))
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(sysFunctionPermission -> sysFunctionPermission.getPermissionScope().concat(":").concat(sysFunctionPermission.getPermissionCode()))
                 .collect(Collectors.toList());
+        collect.forEach(res -> responseObserver.onNext(UserFunctionPermissions.newBuilder().setPermissions(res).build()));
+        responseObserver.onCompleted();
     }
 
     /**
      * 得到所有用户的角色
      *
-     * @param userId 用户id
-     * @return {@link List}<{@link String}>
+     * @param request          请求
+     * @param responseObserver 响应的观察者
      */
     @Override
-    public List<String> getAllRoleCodesOfTheUser(Long userId) {
-        DubboUtil.setRequestAttributesFromRpcContext();
+    @InterceptorIgnore(dataPermission = "true")
+    public void getAllRoleCodesOfTheUser(UserId request, StreamObserver<RoleCodes> responseObserver) {
+        Long userId = Long.parseLong(request.getUserId());
         List<Long> roleIdList = userRoleService.queryUserRoleRelationshipBasedOnUserId(userId)
                 .stream()
                 .map(SysUserRoleVO::getRoleId)
                 .collect(Collectors.toList());
-        return Optional.ofNullable(roleService.listByIds(roleIdList))
+        List<String> collect = Optional.ofNullable(roleService.listByIds(roleIdList))
                 .orElseGet(CollUtil::newLinkedList)
                 .stream()
                 .map(SysRole::getRoleCode)
                 .collect(Collectors.toList());
+        collect.forEach(res -> responseObserver.onNext(RoleCodes.newBuilder().setRoleCode(res).build()));
+        responseObserver.onCompleted();
     }
 }

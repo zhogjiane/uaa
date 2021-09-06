@@ -24,8 +24,11 @@
 
 package cn.conifercone.uaa.util;
 
-import cn.conifercone.uaa.domain.constant.UserSessionDataNameConstant;
+import cn.conifercone.uaa.domain.constant.JwtDataConstant;
+import cn.conifercone.uaa.domain.constant.TokenThreadLocal;
+import cn.dev33.satoken.exception.SaTokenException;
 import cn.dev33.satoken.stp.StpUtil;
+import io.jsonwebtoken.Claims;
 
 /**
  * 数据权限工具类
@@ -44,6 +47,14 @@ public class DataPermissionsUtil {
      * @return {@link Integer}
      */
     public static Integer getLoginUserDataPermissions() {
-        return Integer.parseInt(String.valueOf(StpUtil.getSession().get(UserSessionDataNameConstant.DATA_PERMISSIONS)));
+        String tokenValue;
+        try {
+            tokenValue = StpUtil.getTokenValue();
+        } catch (SaTokenException e) {
+            // 尝试从线程变量中获取tokenValue
+            tokenValue = TokenThreadLocal.threadLocal.get();
+        }
+        Claims claims = SaTokenJwtUtil.getClaims(tokenValue);
+        return Integer.parseInt(String.valueOf(claims.get(JwtDataConstant.DATA_PERMISSIONS)));
     }
 }

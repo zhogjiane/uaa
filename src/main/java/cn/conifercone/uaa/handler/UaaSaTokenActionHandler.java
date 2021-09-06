@@ -22,27 +22,37 @@
  * SOFTWARE.
  */
 
-package cn.conifercone.uaa.domain.constant;
+package cn.conifercone.uaa.handler;
+
+import cn.conifercone.uaa.domain.constant.JwtDataConstant;
+import cn.conifercone.uaa.domain.entity.SysUser;
+import cn.conifercone.uaa.mapper.UserMapper;
+import cn.conifercone.uaa.util.SaTokenJwtUtil;
+import cn.dev33.satoken.action.SaTokenActionDefaultImpl;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 登录用户Session数据名称常量
+ * 继承Sa-Token行为Bean默认实现, 重写部分逻辑
  *
  * @author sky5486560@gmail.com
- * @date 2021/8/21
+ * @date 2021/9/6
  */
-public class UserSessionDataNameConstant {
+@Component
+public class UaaSaTokenActionHandler extends SaTokenActionDefaultImpl {
 
-    private UserSessionDataNameConstant() {
+    @Resource
+    UserMapper userMapper;
+
+    @Override
+    public String createToken(Object loginId, String loginType) {
+        SysUser sysUser = userMapper.queryUsersBasedOnId(Long.parseLong(String.valueOf(loginId)));
+        Map<String, Object> map = new HashMap<>();
+        map.put(JwtDataConstant.TENANT_ID, String.valueOf(sysUser.getTenantId()));
+        map.put(JwtDataConstant.DATA_PERMISSIONS, sysUser.getDataPermissions().getCode());
+        return SaTokenJwtUtil.createToken(loginId, map);
     }
-
-    /**
-     * 租户id
-     */
-    public static final String TENANT_ID = "tenantId";
-
-    /**
-     * 数据权限范围
-     */
-    public static final String DATA_PERMISSIONS = "dataPermissions";
-
 }

@@ -24,8 +24,14 @@
 
 package cn.conifercone.uaa.handler;
 
+import cn.conifercone.uaa.domain.constant.TokenThreadLocal;
+import cn.conifercone.uaa.domain.enumerate.ResultCode;
+import cn.conifercone.uaa.domain.exception.BizException;
 import cn.conifercone.uaa.util.DataPermissionsUtil;
+import cn.conifercone.uaa.util.SaTokenJwtUtil;
+import cn.dev33.satoken.exception.SaTokenException;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
@@ -42,6 +48,7 @@ import net.sf.jsqlparser.schema.Column;
  * @date 2021/8/24
  */
 @Slf4j
+@SuppressWarnings("unused")
 public class UaaDataPermissionHandler implements DataPermissionHandler {
 
     /**
@@ -64,9 +71,20 @@ public class UaaDataPermissionHandler implements DataPermissionHandler {
                 return where;
             // 查看自己的数据
             case 3:
+                String tokenValue;
+                try {
+                    tokenValue = StpUtil.getTokenValue();
+                } catch (SaTokenException e) {
+                    // 尝试从线程变量中获取tokenValue
+                    tokenValue = TokenThreadLocal.threadLocal.get();
+                }
                 EqualsTo selfEqualsTo = new EqualsTo();
                 selfEqualsTo.setLeftExpression(new Column("create_by"));
-                selfEqualsTo.setRightExpression(new LongValue(StpUtil.getLoginIdAsLong()));
+                String loginId = SaTokenJwtUtil.getLoginId(tokenValue);
+                if (CharSequenceUtil.isBlank(loginId)) {
+                    throw new BizException(ResultCode.USER_NOT_LOGIN);
+                }
+                selfEqualsTo.setRightExpression(new LongValue(loginId));
                 return new AndExpression(where, selfEqualsTo);
             default:
                 break;
