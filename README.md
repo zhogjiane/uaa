@@ -118,7 +118,7 @@
 
 ## 维护者
 
-[@conifercone](https://github.com/conifercone)。
+[@conifercone](https://github.com/conifercone)
 
 ## 如何贡献
 
