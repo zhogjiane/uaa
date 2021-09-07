@@ -41,7 +41,7 @@ dependencies {
     // mybatis
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     // mybatis plus
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.2'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.3'
     // druid数据库连接池
     implementation 'com.alibaba:druid-spring-boot-starter:1.2.6'
     // 配置中心
