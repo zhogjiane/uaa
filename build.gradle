@@ -61,7 +61,7 @@ dependencies {
     // saToken Oauth2
     implementation 'cn.dev33:sa-token-oauth2:1.25.0'
     // redis连接池
-    implementation 'org.apache.commons:commons-pool2:2.10.0'
+    implementation 'org.apache.commons:commons-pool2:2.11.1'
     // swagger支持
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     // jetcache缓存框架
