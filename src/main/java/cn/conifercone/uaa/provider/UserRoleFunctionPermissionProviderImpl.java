@@ -35,7 +35,6 @@ import cn.conifercone.uaa.service.IRoleFunctionPermissionService;
 import cn.conifercone.uaa.service.IRoleService;
 import cn.conifercone.uaa.service.IUserRoleService;
 import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
@@ -73,7 +72,6 @@ public class UserRoleFunctionPermissionProviderImpl extends UserRoleFunctionPerm
      * @param responseObserver 响应的观察者
      */
     @Override
-    @InterceptorIgnore(dataPermission = "true")
     public void obtainUserFunctionPermissions(UserId request, StreamObserver<UserFunctionPermissions> responseObserver) {
         Long userId = Long.parseLong(request.getUserId());
         //查询当前用户所拥有的角色
@@ -100,7 +98,6 @@ public class UserRoleFunctionPermissionProviderImpl extends UserRoleFunctionPerm
      * @param responseObserver 响应的观察者
      */
     @Override
-    @InterceptorIgnore(dataPermission = "true")
     public void getAllRoleCodesOfTheUser(UserId request, StreamObserver<RoleCodes> responseObserver) {
         Long userId = Long.parseLong(request.getUserId());
         List<Long> roleIdList = userRoleService.queryUserRoleRelationshipBasedOnUserId(userId)

@@ -24,8 +24,6 @@
 
 package cn.conifercone.uaa.util;
 
-import cn.conifercone.uaa.domain.constant.JwtDataConstant;
-import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
@@ -38,9 +36,6 @@ public class MockLogin {
 
     public static void loginIn() {
         StpUtil.login(0);
-        SaSession session = StpUtil.getSession();
-        session.set(JwtDataConstant.TENANT_ID, 0);
-        session.set(JwtDataConstant.DATA_PERMISSIONS, 3);
     }
 
     public static void loginOut() {

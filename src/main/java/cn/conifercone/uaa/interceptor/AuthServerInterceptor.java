@@ -59,6 +59,8 @@ public class AuthServerInterceptor implements ServerInterceptor {
         ServerCall<ReqT, RespT> call = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
             @Override
             public void sendHeaders(Metadata headers) {
+                //服务端写回参数的同时清理ThreadLocal
+                TokenThreadLocal.threadLocal.remove();
                 //由于grpc服务是全双工的,因此我们也可以向客户端推送 Metadata 数据
                 headers.put(token, tokenStr);
                 super.sendHeaders(headers);
