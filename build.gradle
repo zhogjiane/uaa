@@ -55,7 +55,7 @@ dependencies {
     // saToken
     implementation 'cn.dev33:sa-token-spring-boot-starter:1.25.0'
     // hutool工具包
-    implementation 'cn.hutool:hutool-all:5.7.9'
+    implementation 'cn.hutool:hutool-all:5.7.12'
     // saToken redis分布式存储
     implementation 'cn.dev33:sa-token-dao-redis-jackson:1.25.0'
     // saToken Oauth2
