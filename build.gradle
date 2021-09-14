@@ -75,6 +75,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     // jjwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // sentinel
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel'
+    // sentinel grpc adapter
+    implementation 'com.alibaba.csp:sentinel-grpc-adapter:1.8.2'
     // 单元测试
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
